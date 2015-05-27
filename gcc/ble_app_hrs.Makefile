@@ -40,7 +40,7 @@ CFLAGS := -DDEBUG_NRF_USER -DBLE_STACK_SUPPORT_REQD -DS110
 ASMFLAGS := -D__HEAP_SIZE=0
 
 # keep every function in separate section. This will allow linker to dump unused functions
-CFLAGS += -ffunction-sections
+CFLAGS += -ffunction-sections -g
 
 # let linker to dump unused sections
 #LDFLAGS := -Wl,--gc-sections
