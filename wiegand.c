@@ -5,7 +5,7 @@
 #include "nrf51.h"
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
-//#include "retarget.h"
+#include "retarget.h"
 
 #include "wiegand.h"
 
@@ -61,7 +61,7 @@ static uint8_t pin_read(uint8_t pin_number)
 int main_OLD(void)
 {
     wiegand_init();
-    //retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
+    retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Init complete.\n");
     while (1)
     {
