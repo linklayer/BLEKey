@@ -270,6 +270,19 @@ static void sensor_contact_detected_timeout_handler(void * p_context)
     ble_wiegand_sensor_contact_detected_update(&m_wiegand, sensor_contact_detected);
 }
 
+
+/**@brief Function for the LEDs initialization.
+ *
+ * @details Initializes all LEDs used by this application.
+ */
+static void leds_init(void)
+{
+    nrf_gpio_cfg_output(ADVERTISING_LED_PIN_NO);
+    nrf_gpio_cfg_output(CONNECTED_LED_PIN_NO);
+    nrf_gpio_cfg_output(ASSERT_LED_PIN_NO);
+}
+
+
 /**@brief Function for the Timer initialization.
  *
  * @details Initializes the timer module. This creates and starts application timers.
@@ -821,6 +834,9 @@ static void power_manage(void)
  */
 int main(void)
 {
+
+    // Initialize.
+    leds_init();
     buttons_init();
     timers_init();
     ble_stack_init();
