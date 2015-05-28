@@ -25,6 +25,7 @@ volatile uint32_t timerStop;
 
 void wiegand_init(void)
 {
+    printf("Initializing wiegand shit...");
     //
     // Set up GPIO and pin interrupts
     //
