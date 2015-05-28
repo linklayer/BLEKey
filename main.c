@@ -737,7 +737,8 @@ static void ble_stack_init(void)
     uint32_t err_code;
 
     // Initialize the SoftDevice handler module.
-    SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_XTAL_20_PPM, false);
+    SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_RC_250_PPM_250MS_CALIBRATION, 
+			    false);
 
 #ifdef S110
     // Enable BLE stack
