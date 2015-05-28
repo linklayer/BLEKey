@@ -45,6 +45,7 @@
 #include "ble_debug_assert_handler.h"
 #include "pstorage.h"
 #include "app_trace.h"
+#include "wiegand.h"
 
 #define IS_SRVC_CHANGED_CHARACT_PRESENT     0                                           /**< Include or not the service_changed characteristic. if not enabled, the server's database cannot be changed for the lifetime of the device*/
 
@@ -113,9 +114,9 @@ static app_timer_id_t                        m_sensor_contact_timer_id;         
 static dm_application_instance_t             m_app_handle;                              /**< Application identifier allocated by device manager */
 
 static bool                                  m_memory_access_in_progress = false;       /**< Flag to keep track of ongoing operations on persistent memory. */
-#ifdef BLE_DFU_APP_SUPPORT    
+#ifdef BLE_DFU_APP_SUPPORT
 static ble_dfu_t                             m_dfus;                                    /**< Structure used to identify the DFU service. */
-#endif // BLE_DFU_APP_SUPPORT    
+#endif // BLE_DFU_APP_SUPPORT
 
 #if 0
 /**@brief Function for error handling, which is called when an error has occurred.
@@ -165,7 +166,7 @@ void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p
     /* To be able to see function parameters in a debugger. */
     uint32_t temp = 1;
     while(temp);
-    CRITICAL_REGION_EXIT();    
+    CRITICAL_REGION_EXIT();
 }
 
 #endif
@@ -202,7 +203,7 @@ static void battery_level_update(void)
         (err_code != NRF_ERROR_INVALID_STATE) &&
         (err_code != BLE_ERROR_NO_TX_BUFFERS) &&
         (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
-    )
+        )
     {
         APP_ERROR_HANDLER(err_code);
     }
@@ -244,7 +245,7 @@ static void heart_rate_meas_timeout_handler(void * p_context)
         (err_code != NRF_ERROR_INVALID_STATE) &&
         (err_code != BLE_ERROR_NO_TX_BUFFERS) &&
         (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
-    )
+        )
     {
         APP_ERROR_HANDLER(err_code);
     }
@@ -356,11 +357,11 @@ static void advertising_init(void)
     uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
 
     ble_uuid_t adv_uuids[] =
-    {
-        {BLE_UUID_HEART_RATE_SERVICE,         BLE_UUID_TYPE_BLE},
-        {BLE_UUID_BATTERY_SERVICE,            BLE_UUID_TYPE_BLE},
-        {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
-    };
+        {
+            {BLE_UUID_HEART_RATE_SERVICE,         BLE_UUID_TYPE_BLE},
+            {BLE_UUID_BATTERY_SERVICE,            BLE_UUID_TYPE_BLE},
+            {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
+        };
 
     // Build and set advertising data.
     memset(&advdata, 0, sizeof(advdata));
@@ -386,7 +387,7 @@ static void advertising_init(void)
 }
 
 
-#ifdef BLE_DFU_APP_SUPPORT    
+#ifdef BLE_DFU_APP_SUPPORT
 static void advertising_stop(void)
 {
     uint32_t err_code;
@@ -402,7 +403,7 @@ static void advertising_stop(void)
 static void reset_prepare(void)
 {
     uint32_t err_code;
-    
+
     if (m_conn_handle != BLE_CONN_HANDLE_INVALID)
     {
         // Disconnect from peer.
@@ -417,12 +418,12 @@ static void reset_prepare(void)
 
     nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
     nrf_gpio_pin_clear(CONNECTED_LED_PIN_NO);
-    
+
     err_code = ble_conn_params_stop();
     APP_ERROR_CHECK(err_code);
 }
 /** @snippet [DFU BLE Reset prepare] */
-#endif // BLE_DFU_APP_SUPPORT    
+#endif // BLE_DFU_APP_SUPPORT
 
 
 /**@brief Function for initializing services that will be used by the application.
@@ -490,8 +491,8 @@ static void services_init(void)
 
     err_code = ble_dis_init(&dis_init);
     APP_ERROR_CHECK(err_code);
-    
-#ifdef BLE_DFU_APP_SUPPORT    
+
+#ifdef BLE_DFU_APP_SUPPORT
     /** @snippet [DFU BLE Service initialization] */
     ble_dfu_init_t   dfus_init;
 
@@ -503,10 +504,10 @@ static void services_init(void)
 
     err_code = ble_dfu_init(&m_dfus, &dfus_init);
     APP_ERROR_CHECK(err_code);
-    
+
     dfu_app_reset_prepare_set(reset_prepare);
     /** @snippet [DFU BLE Service initialization] */
-#endif // BLE_DFU_APP_SUPPORT    
+#endif // BLE_DFU_APP_SUPPORT
 }
 
 
@@ -556,17 +557,17 @@ static void advertising_start(void)
     uint32_t err_code;
     uint32_t count;
 
-    // Verify if there is any flash access pending, if yes delay starting advertising until 
+    // Verify if there is any flash access pending, if yes delay starting advertising until
     // it's complete.
     err_code = pstorage_access_status_get(&count);
     APP_ERROR_CHECK(err_code);
-    
+
     if (count != 0)
     {
         m_memory_access_in_progress = true;
         return;
     }
-    
+
     err_code = sd_ble_gap_adv_start(&m_adv_params);
     APP_ERROR_CHECK(err_code);
 
@@ -638,34 +639,34 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 
     switch (p_ble_evt->header.evt_id)
     {
-        case BLE_GAP_EVT_CONNECTED:
-            nrf_gpio_pin_set(CONNECTED_LED_PIN_NO);
+    case BLE_GAP_EVT_CONNECTED:
+        nrf_gpio_pin_set(CONNECTED_LED_PIN_NO);
+        nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
+
+        m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+        break;
+
+    case BLE_GAP_EVT_DISCONNECTED:
+        nrf_gpio_pin_clear(CONNECTED_LED_PIN_NO);
+
+
+        advertising_start();
+        break;
+
+    case BLE_GAP_EVT_TIMEOUT:
+        if (p_ble_evt->evt.gap_evt.params.timeout.src == BLE_GAP_TIMEOUT_SRC_ADVERTISEMENT)
+        {
             nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
 
-            m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
-            break;
+            // Go to system-off mode (this function will not return; wakeup will cause a reset).
+            err_code = sd_power_system_off();
+            APP_ERROR_CHECK(err_code);
+        }
+        break;
 
-        case BLE_GAP_EVT_DISCONNECTED:
-            nrf_gpio_pin_clear(CONNECTED_LED_PIN_NO);
-
-
-            advertising_start();
-            break;
-
-        case BLE_GAP_EVT_TIMEOUT:
-            if (p_ble_evt->evt.gap_evt.params.timeout.src == BLE_GAP_TIMEOUT_SRC_ADVERTISEMENT)
-            {
-                nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
-
-                // Go to system-off mode (this function will not return; wakeup will cause a reset).
-                err_code = sd_power_system_off();
-                APP_ERROR_CHECK(err_code);
-            }
-            break;
-
-        default:
-            // No implementation needed.
-            break;
+    default:
+        // No implementation needed.
+        break;
     }
 }
 
@@ -677,17 +678,17 @@ static void on_sys_evt(uint32_t sys_evt)
 {
     switch(sys_evt)
     {
-        case NRF_EVT_FLASH_OPERATION_SUCCESS:
-        case NRF_EVT_FLASH_OPERATION_ERROR:
-            if (m_memory_access_in_progress)
-            {
-                m_memory_access_in_progress = false;
-                advertising_start();
-            }
-            break;
-        default:
-            // No implementation needed.
-            break;
+    case NRF_EVT_FLASH_OPERATION_SUCCESS:
+    case NRF_EVT_FLASH_OPERATION_ERROR:
+        if (m_memory_access_in_progress)
+        {
+            m_memory_access_in_progress = false;
+            advertising_start();
+        }
+        break;
+    default:
+        // No implementation needed.
+        break;
     }
 }
 
@@ -704,11 +705,11 @@ static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
     ble_wiegand_on_ble_evt(&m_wiegand, p_ble_evt);
     ble_bas_on_ble_evt(&m_bas, p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
-#ifdef BLE_DFU_APP_SUPPORT    
+#ifdef BLE_DFU_APP_SUPPORT
     /** @snippet [Propagating BLE Stack events to DFU Service] */
     ble_dfu_on_ble_evt(&m_dfus, p_ble_evt);
     /** @snippet [Propagating BLE Stack events to DFU Service] */
-#endif // BLE_DFU_APP_SUPPORT    
+#endif // BLE_DFU_APP_SUPPORT
     on_ble_evt(p_ble_evt);
 }
 
@@ -739,7 +740,7 @@ static void ble_stack_init(void)
     SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_XTAL_20_PPM, false);
 
 #ifdef S110
-    // Enable BLE stack 
+    // Enable BLE stack
     ble_enable_params_t ble_enable_params;
     memset(&ble_enable_params, 0, sizeof(ble_enable_params));
     ble_enable_params.gatts_enable_params.service_changed = IS_SRVC_CHANGED_CHARACT_PRESENT;
@@ -763,11 +764,11 @@ static void buttons_init(void)
 {
     // Set Wakeup and Bonds Delete buttons as wakeup sources.
     nrf_gpio_cfg_sense_input(WAKEUP_BUTTON_PIN,
-                             BUTTON_PULL, 
+                             BUTTON_PULL,
                              NRF_GPIO_PIN_SENSE_LOW);
-    
+
     nrf_gpio_cfg_sense_input(BOND_DELETE_ALL_BUTTON_ID,
-                             BUTTON_PULL, 
+                             BUTTON_PULL,
                              NRF_GPIO_PIN_SENSE_LOW);
 }
 
@@ -792,7 +793,7 @@ static void device_manager_init(void)
     uint32_t                err_code;
     dm_init_param_t         init_data;
     dm_application_param_t  register_param;
-    
+
     // Initialize persistent storage module.
     err_code = pstorage_init();
     APP_ERROR_CHECK(err_code);
@@ -804,7 +805,7 @@ static void device_manager_init(void)
     APP_ERROR_CHECK(err_code);
 
     memset(&register_param.sec_param, 0, sizeof(ble_gap_sec_params_t));
-    
+
     register_param.sec_param.timeout      = SEC_PARAM_TIMEOUT;
     register_param.sec_param.bond         = SEC_PARAM_BOND;
     register_param.sec_param.mitm         = SEC_PARAM_MITM;
@@ -834,17 +835,19 @@ static void power_manage(void)
 int main(void)
 {
 
-  	// Initialize.
+    // Initialize.
     leds_init();
     buttons_init();
     timers_init();
-	ble_stack_init();    
+    ble_stack_init();
     device_manager_init();
     gap_params_init();
     advertising_init();
     services_init();
     sensor_sim_init();
     conn_params_init();
+    
+    wiegand_init();
 
     // Start execution.
     application_timers_start();
@@ -856,5 +859,3 @@ int main(void)
         power_manage();
     }
 }
-
-

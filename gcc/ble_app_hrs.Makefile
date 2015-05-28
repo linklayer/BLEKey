@@ -7,6 +7,7 @@ C_SOURCE_FILES += main.c
 C_SOURCE_FILES += ble_dis.c
 C_SOURCE_FILES += ble_bas.c
 C_SOURCE_FILES += ble_wiegand.c
+C_SOURCE_FILES += wiegand.c
 
 C_SOURCE_FILES += ble_srv_common.c
 C_SOURCE_FILES += ble_sensorsim.c

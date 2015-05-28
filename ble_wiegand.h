@@ -58,7 +58,6 @@ typedef struct ble_wiegand_s
     ble_gatts_char_handles_t     data_length_handles;                                  /**< Handles related to the Heart Rate Control Point characteristic. */
     uint16_t                     conn_handle;                                          /**< Handle of the current connection (as provided by the BLE stack, is BLE_CONN_HANDLE_INVALID if not in a connection). */
     bool                         is_sensor_contact_detected;                           /**< TRUE if sensor contact has been detected. */
-    uint16_t                     rr_interval[BLE_WIEGAND_MAX_BUFFERED_RR_INTERVALS];   /**< Set of RR Interval measurements since the last Heart Rate Measurement transmission. */
     uint16_t                     rr_interval_count;                                    /**< Number of RR Interval measurements since the last Heart Rate Measurement transmission. */
 } ble_wiegand_t;
 
