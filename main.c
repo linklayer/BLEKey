@@ -52,8 +52,8 @@
 #define WAKEUP_BUTTON_PIN                    BUTTON_0                                   /**< Button used to wake up the application. */
 #define BOND_DELETE_ALL_BUTTON_ID            BUTTON_1                                   /**< Button used for deleting all bonded centrals during startup. */
 
-#define ADVERTISING_LED_PIN_NO               LED_0                                      /**< Is on when device is advertising. */
-#define CONNECTED_LED_PIN_NO                 LED_1                                      /**< Is on when device has connected. */
+#define ADVERTISING_LED_PIN_NO               20                                         /**< Is on when device is advertising. */
+#define CONNECTED_LED_PIN_NO                 LED_2                                      /**< Is on when device has connected. */
 #define ASSERT_LED_PIN_NO                    LED_7                                      /**< Is on when application has asserted. */
 
 #define DEVICE_NAME                          "BLEKey"                                   /**< Name of device. Will be included in the advertising data. */
