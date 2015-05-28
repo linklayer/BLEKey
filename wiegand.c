@@ -25,6 +25,7 @@ volatile uint32_t timerStop;
 
 void wiegand_init(void)
 {
+    retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Initializing wiegand shit...");
     //
     // Set up GPIO and pin interrupts
@@ -62,7 +63,7 @@ static uint8_t pin_read(uint8_t pin_number)
 int main_OLD(void)
 {
     wiegand_init();
-    retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
+
     printf("Init complete.\n");
     while (1)
     {
