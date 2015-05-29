@@ -859,6 +859,7 @@ int main(void)
     // Enter main loop.
     for (;;)
     {
+	wiegand_task();
         power_manage();
     }
 }

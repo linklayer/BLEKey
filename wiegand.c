@@ -27,7 +27,7 @@ static app_gpiote_user_id_t gpiote_id;
 
 
 static void pin_change_handler(uint32_t event_pins_low_to_high,
-			       uint32_t event_pins_high_to_low)
+                                   uint32_t event_pins_high_to_low)
 {
 
     // This handler will be run after wakeup from system ON (GPIO wakeup)
@@ -36,12 +36,12 @@ static void pin_change_handler(uint32_t event_pins_low_to_high,
         //volatile uint32_t portStatus = NRF_GPIO->IN;
 
         // If DATA1 is low assign it, otherwise leave it at 0 and move on.
-        if (!(event_pins_high_to_low >> DATA1_IN & 1UL)) 
+        if (!(event_pins_high_to_low >> DATA1_IN & 1UL))
         {
             dataBits[bitCount] = 1;
             printf("1");
         } else
-        { 
+        {
             printf("0");
         }
         dataIncoming = true;
@@ -56,7 +56,7 @@ void wiegand_init(void)
 {
     // We're not concerned with low to high on Wiegand
     uint32_t low_to_high_bitmask = 0;
-    // Set the bitmask for input pins we care about 
+    // Set the bitmask for input pins we care about
     uint32_t high_to_low_bitmask = (1 << DATA0_IN) | (1 << DATA1_IN);
     uint32_t res;
 
@@ -78,7 +78,7 @@ void wiegand_init(void)
         printf("Registration with GPIOTE failed.");
         return;
     }
-    
+
     // Enable notifications for example user module which is already registered.
     res = app_gpiote_user_disable(gpiote_id);
     if (res != NRF_SUCCESS)
@@ -111,44 +111,32 @@ void wiegand_init(void)
   }
 */
 
-int main_OLD(void)
+void wiegand_task(void)
 {
-    wiegand_init();
+    if (dataIncoming && !timerStarted) {
+        NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
+        timerStarted = true;
+    }
+    if (dataReady) {
+        NRF_TIMER2->TASKS_STOP = 1;     // Stop the clock
+        if (bitCount > 1)   // avoid garbage data at startup.
+        {
+            printf("Read %d bits: ", bitCount);
+            for (uint8_t i=0; i<bitCount; i++)
+            {
+                printf("%d", dataBits[i]);
+            }
 
-    printf("Init complete.\n");
-    while (1)
-    {
-        if (dataIncoming && !timerStarted) {
-            NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
-            timerStarted = true;
         }
-        if (dataReady) {
-            //NVIC_DisableIRQ(TIMER2_IRQn);
-            NRF_TIMER2->TASKS_STOP = 1;     // Stop the clock
-            if (bitCount > 1)   // avoid garbage data at startup.
-            {
-                printf("Read %d bits: ", bitCount);
-                for (uint8_t i=0; i<bitCount; i++)
-                {
-                    printf("%d", dataBits[i]);
-                }
-                printf("\n");
-            }
-            dataIncoming = false;
-            timerStarted = false;
-            bitCount = 0;
-            dataReady = false;
-            // clears the old data 
-            for (uint8_t i=0; i<MAX_BITS; i++)
-            {
-                dataBits[i] = 0;
-            }
+        dataIncoming = false;
+        timerStarted = false;
+        bitCount = 0;
+        dataReady = false;
+        // clears the old data
+        for (uint8_t i=0; i<MAX_BITS; i++)
+        {
+            dataBits[i] = 0;
         }
-        // Enter System ON sleep mode
-        __WFE();
-        // Make sure any pending events are cleared
-        __SEV();
-        __WFE();
     }
 }
 
