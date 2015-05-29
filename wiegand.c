@@ -113,6 +113,8 @@ void wiegand_init(void)
 
 void wiegand_task(void)
 {
+    printf("tick!\r\n");
+
     if (dataIncoming && !timerStarted) {
         NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
         timerStarted = true;
