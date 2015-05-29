@@ -25,7 +25,6 @@
 #include "nrf.h"
 #include "app_error.h"
 #include "nrf_gpio.h"
-#include "app_gpiote.h"
 #include "nrf51_bitfields.h"
 #include "ble.h"
 #include "ble_hci.h"
@@ -849,7 +848,6 @@ int main(void)
     sensor_sim_init();
     conn_params_init();
     
-    APP_GPIOTE_INIT(1);
     wiegand_init();
 
     // Start execution.

@@ -23,8 +23,6 @@ C_SOURCE_FILES += crc16.c
 C_SOURCE_FILES += device_manager_peripheral.c
 C_SOURCE_FILES += app_trace.c
 C_SOURCE_FILES += simple_uart.c
-C_SOURCE_FILES += app_gpiote.c
-C_SOURCE_FILES += app_button.c
 
 SDK_PATH = ../../../../../
 
