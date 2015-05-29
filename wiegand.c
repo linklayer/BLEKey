@@ -4,6 +4,7 @@
 
 #include "nrf51.h"
 #include "nrf_gpio.h"
+#include "app_gpiote.h"
 #include "nrf_delay.h"
 #include "retarget.h"
 
@@ -22,9 +23,33 @@ volatile bool dataIncoming = false;
 volatile bool dataReady = false;
 volatile bool timerStarted = false;
 volatile uint32_t timerStop;
+static app_gpiote_user_id_t gpiote_id;
+static void pin_change_handler(uint32_t event_pins_low_to_high,
+                                   uint32_t event_pins_high_to_low)
+{
+
+    // This handler will be run after wakeup from system ON (GPIO wakeup)
+    if(NRF_GPIOTE->EVENTS_PORT)
+    {
+        volatile uint32_t portStatus = NRF_GPIO->IN;
+        NRF_GPIOTE->EVENTS_PORT = 0;    // Clear event
+	// If DATA1 is low assign it, otherwise leave it at 0 and move on.
+        if (!(portStatus >> DATA1_IN & 1UL)) dataBits[bitCount] = 1;
+        dataIncoming = true;
+        NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
+        NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY); // Reset timer
+        bitCount++;
+    }
+
+}
 
 void wiegand_init(void)
 {
+    app_gpiote_event_handler_t gpiote_handler;
+    uint32_t low_to_high_bitmask = (1 << DATA0_IN) | (1 << DATA1_IN);
+    uint32_t high_to_low_bitmask = (1 << DATA0_IN) | (1 << DATA1_IN);
+    uint32_t res;
+
     retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Initializing wiegand shit...");
     //
@@ -36,6 +61,17 @@ void wiegand_init(void)
     // Set the GPIOTE PORT event as interrupt source, and enable interrupts for GPIOTE
     NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
     NVIC_EnableIRQ(GPIOTE_IRQn);
+
+    // register with GPIOTE module
+    gpiote_handler = &pin_change_handler;
+    res = app_gpiote_user_register(&gpiote_id,
+                                   low_to_high_bitmask,
+                                   high_to_low_bitmask,
+                                   gpiote_handler);
+    if (res != NRF_SUCCESS) {
+        // failed to init GPIOTE
+        return;
+    }
 
     //
     //  adapted from https://github.com/NordicSemiconductor/nrf51-TIMER-examples/blob/master/timer_example_timer_mode/main.c
@@ -52,12 +88,12 @@ void wiegand_init(void)
 }
 
 /*
-static uint8_t pin_read(uint8_t pin_number)
-{
-    // Borrowed from:
-    // http://developer.mbed.org/teams/Nordic-Semiconductor/code/nRF51822/docs/3794dc9540f0/nrf__gpio_8h_source.html
-    return ((NRF_GPIO->IN >> pin_number) & 1UL);
-}
+  static uint8_t pin_read(uint8_t pin_number)
+  {
+  // Borrowed from:
+  // http://developer.mbed.org/teams/Nordic-Semiconductor/code/nRF51822/docs/3794dc9540f0/nrf__gpio_8h_source.html
+  return ((NRF_GPIO->IN >> pin_number) & 1UL);
+  }
 */
 
 int main_OLD(void)
@@ -99,21 +135,6 @@ int main_OLD(void)
         __WFE();
     }
 }
-
-/*void GPIOTE_IRQHandler(void) {
-    // This handler will be run after wakeup from system ON (GPIO wakeup)
-    if(NRF_GPIOTE->EVENTS_PORT)
-    {
-        volatile uint32_t portStatus = NRF_GPIO->IN;
-        NRF_GPIOTE->EVENTS_PORT = 0;    // Clear event
-        // If DATA1 is low assign it, otherwise leave it at 0 and move on.
-        if (!(portStatus >> DATA1_IN & 1UL)) dataBits[bitCount] = 1;
-        dataIncoming = true;
-        NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
-        NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY); // Reset timer
-        bitCount++;
-    }
-    }*/
 
 void TIMER2_IRQHandler(void)
 {
