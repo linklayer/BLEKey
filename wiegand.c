@@ -36,7 +36,14 @@ static void pin_change_handler(uint32_t event_pins_low_to_high,
         //volatile uint32_t portStatus = NRF_GPIO->IN;
 
         // If DATA1 is low assign it, otherwise leave it at 0 and move on.
-        if (!(event_pins_high_to_low >> DATA1_IN & 1UL)) dataBits[bitCount] = 1;
+        if (!(event_pins_high_to_low >> DATA1_IN & 1UL)) 
+        {
+            dataBits[bitCount] = 1;
+            printf("1");
+        } else
+        { 
+            printf("0");
+        }
         dataIncoming = true;
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY); // Reset timer
