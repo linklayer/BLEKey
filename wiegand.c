@@ -10,9 +10,9 @@
 
 #include "wiegand.h"
 
-#define DATA0_IN 5 // Wiegand data in
-#define DATA1_IN 6
-#define LED 4
+// wiegand data pins
+#define DATA0_IN 0 
+#define DATA1_IN 1
 
 #define TIMER_DELAY 3000 // Timer is set at 1Mhz, 3000 ticks = 3ms
 #define MAX_BITS 100
