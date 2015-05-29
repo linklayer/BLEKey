@@ -62,11 +62,6 @@ void wiegand_init(void)
 
     retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Initializing wiegand shit...");
-    //
-    // Set up GPIO and pin interrupts
-    //
-    nrf_gpio_cfg_sense_input(DATA0_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
-    nrf_gpio_cfg_sense_input(DATA1_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
 
     // register with GPIOTE module
     res = app_gpiote_user_register(&gpiote_id,
