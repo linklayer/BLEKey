@@ -33,10 +33,10 @@ static void pin_change_handler(uint32_t event_pins_low_to_high,
     // This handler will be run after wakeup from system ON (GPIO wakeup)
     if(NRF_GPIOTE->EVENTS_PORT)
     {
-        volatile uint32_t portStatus = NRF_GPIO->IN;
+        //volatile uint32_t portStatus = NRF_GPIO->IN;
 
         // If DATA1 is low assign it, otherwise leave it at 0 and move on.
-        if (!(portStatus >> DATA1_IN & 1UL)) dataBits[bitCount] = 1;
+        if (!(event_pins_high_to_low >> DATA1_IN & 1UL)) dataBits[bitCount] = 1;
         dataIncoming = true;
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY); // Reset timer
@@ -47,7 +47,9 @@ static void pin_change_handler(uint32_t event_pins_low_to_high,
 
 void wiegand_init(void)
 {
+    // We're not concerned with low to high on Wiegand
     uint32_t low_to_high_bitmask = 0;
+    // Set the bitmask for input pins we care about 
     uint32_t high_to_low_bitmask = (1 << DATA0_IN) | (1 << DATA1_IN);
     uint32_t res;
 
@@ -58,7 +60,6 @@ void wiegand_init(void)
     //
     nrf_gpio_cfg_sense_input(DATA0_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
     nrf_gpio_cfg_sense_input(DATA1_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
-    nrf_gpio_cfg_output(LED);
 
     // register with GPIOTE module
     res = app_gpiote_user_register(&gpiote_id,
@@ -67,6 +68,16 @@ void wiegand_init(void)
                                    &pin_change_handler);
     if (res != NRF_SUCCESS) {
         // failed to init GPIOTE
+        printf("Registration with GPIOTE failed.");
+        return;
+    }
+    
+    // Enable notifications for example user module which is already registered.
+    res = app_gpiote_user_disable(gpiote_id);
+    if (res != NRF_SUCCESS)
+    {
+        // Enabling notifications failed. Take corrective/needed action.
+        printf("Couldn't enable notifications.");
         return;
     }
 
@@ -120,6 +131,7 @@ int main_OLD(void)
             timerStarted = false;
             bitCount = 0;
             dataReady = false;
+            // clears the old data 
             for (uint8_t i=0; i<MAX_BITS; i++)
             {
                 dataBits[i] = 0;
