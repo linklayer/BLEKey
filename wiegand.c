@@ -24,16 +24,18 @@ volatile bool dataReady = false;
 volatile bool timerStarted = false;
 volatile uint32_t timerStop;
 static app_gpiote_user_id_t gpiote_id;
+
+
 static void pin_change_handler(uint32_t event_pins_low_to_high,
-                                   uint32_t event_pins_high_to_low)
+			       uint32_t event_pins_high_to_low)
 {
 
     // This handler will be run after wakeup from system ON (GPIO wakeup)
     if(NRF_GPIOTE->EVENTS_PORT)
     {
         volatile uint32_t portStatus = NRF_GPIO->IN;
-        NRF_GPIOTE->EVENTS_PORT = 0;    // Clear event
-	// If DATA1 is low assign it, otherwise leave it at 0 and move on.
+
+        // If DATA1 is low assign it, otherwise leave it at 0 and move on.
         if (!(portStatus >> DATA1_IN & 1UL)) dataBits[bitCount] = 1;
         dataIncoming = true;
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
@@ -45,8 +47,7 @@ static void pin_change_handler(uint32_t event_pins_low_to_high,
 
 void wiegand_init(void)
 {
-    app_gpiote_event_handler_t gpiote_handler;
-    uint32_t low_to_high_bitmask = (1 << DATA0_IN) | (1 << DATA1_IN);
+    uint32_t low_to_high_bitmask = 0;
     uint32_t high_to_low_bitmask = (1 << DATA0_IN) | (1 << DATA1_IN);
     uint32_t res;
 
@@ -58,16 +59,12 @@ void wiegand_init(void)
     nrf_gpio_cfg_sense_input(DATA0_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
     nrf_gpio_cfg_sense_input(DATA1_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
     nrf_gpio_cfg_output(LED);
-    // Set the GPIOTE PORT event as interrupt source, and enable interrupts for GPIOTE
-    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
-    NVIC_EnableIRQ(GPIOTE_IRQn);
 
     // register with GPIOTE module
-    gpiote_handler = &pin_change_handler;
     res = app_gpiote_user_register(&gpiote_id,
                                    low_to_high_bitmask,
                                    high_to_low_bitmask,
-                                   gpiote_handler);
+                                   &pin_change_handler);
     if (res != NRF_SUCCESS) {
         // failed to init GPIOTE
         return;
