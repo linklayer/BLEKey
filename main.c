@@ -858,6 +858,6 @@ int main(void)
     for (;;)
     {
 	wiegand_task();
-        //power_manage();
+    power_manage();
     }
 }
