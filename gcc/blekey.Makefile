@@ -24,7 +24,7 @@ C_SOURCE_FILES += device_manager_peripheral.c
 C_SOURCE_FILES += app_trace.c
 C_SOURCE_FILES += simple_uart.c
 
-SDK_PATH = ../../../../../
+SDK_PATH = ../nordic/nrf51822/
 
 OUTPUT_FILENAME := ble_app_hrs
 
