@@ -1,0 +1,403 @@
+PC-lint for C/C++ (NT) Vers. 9.00j, Copyright Gimpel Software 1985-2012
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\templates\system_nrf51.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\templates\system_nrf51.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Board\nrf6310\s110\ble_app_hrs\main.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Board\nrf6310\s110\ble_app_hrs\main.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_services\ble_dis.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_services\ble_dis.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_services\ble_bas.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_services\ble_bas.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_services\ble_hrs.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_services\ble_hrs.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_error_log.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_error_log.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_advdata.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_advdata.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_services\ble_srv_common.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_services\ble_srv_common.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_sensorsim.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_sensorsim.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\sd_common\softdevice_handler.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\sd_common\softdevice_handler.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_conn_params.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_conn_params.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\crc16.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\crc16.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_debug_assert_handler.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_debug_assert_handler.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\device_manager\device_manager_peripheral.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\device_manager\device_manager_peripheral.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\app_trace.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\app_trace.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\simple_uart\simple_uart.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\simple_uart\simple_uart.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\app_util_platform.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\app_util_platform.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_event.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_event.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_evt_tx_complete.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_evt_tx_complete.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_address_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_address_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_address_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_address_set.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_adv_data_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_adv_data_set.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_adv_start.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_adv_start.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_adv_stop.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_adv_stop.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_appearance_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_appearance_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_appearance_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_appearance_set.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_auth_key_reply.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_auth_key_reply.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_authenticate.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_authenticate.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_conn_param_update.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_conn_param_update.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_conn_sec_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_conn_sec_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_device_name_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_device_name_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_device_name_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_device_name_set.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_disconnect.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_disconnect.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_auth_key_request.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_auth_key_request.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_auth_status.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_auth_status.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_conn_param_update.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_conn_param_update.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_conn_sec_update.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_conn_sec_update.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_connected.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_connected.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_disconnected.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_disconnected.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_passkey_display.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_passkey_display.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_rssi_changed.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_rssi_changed.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_sec_info_request.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_sec_info_request.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_sec_params_request.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_sec_params_request.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_timeout.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_evt_timeout.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_ppcp_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_ppcp_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_ppcp_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_ppcp_set.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_rssi_start.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_rssi_start.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_rssi_stop.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_rssi_stop.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_sec_info_reply.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_sec_info_reply.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_sec_params_reply.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_sec_params_reply.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_tx_power_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gap_tx_power_set.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_char_value_by_uuid_read.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_char_value_by_uuid_read.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_char_values_read.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_char_values_read.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_characteristics_discover.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_characteristics_discover.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_descriptors_discover.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_descriptors_discover.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_char_disc_rsp.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_char_disc_rsp.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_char_val_by_uuid_read_rsp.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_char_val_by_uuid_read_rsp.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_char_vals_read_rsp.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_char_vals_read_rsp.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_desc_disc_rsp.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_desc_disc_rsp.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_hvx.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_hvx.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_prim_srvc_disc_rsp.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_prim_srvc_disc_rsp.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_read_rsp.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_read_rsp.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_rel_disc_rsp.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_rel_disc_rsp.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_timeout.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_timeout.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_write_rsp.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_evt_write_rsp.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_hv_confirm.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_hv_confirm.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_primary_services_discover.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_primary_services_discover.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_read.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_read.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_relationships_discover.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_relationships_discover.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_write.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gattc_write.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_characteristic_add.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_characteristic_add.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_descriptor_add.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_descriptor_add.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_hvc.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_hvc.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_rw_authorize_request.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_rw_authorize_request.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_sc_confirm.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_sc_confirm.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_sys_attr_missing.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_sys_attr_missing.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_timeout.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_timeout.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_write.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_evt_write.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_hvx.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_hvx.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_include_add.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_include_add.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_rw_authorize_reply.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_rw_authorize_reply.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_service_add.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_service_add.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_service_changed.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_service_changed.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_sys_attr_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_sys_attr_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_sys_attr_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_sys_attr_set.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_value_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_value_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_value_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_gatts_value_set.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_l2cap_cid_register.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_l2cap_cid_register.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_l2cap_cid_unregister.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_l2cap_cid_unregister.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_l2cap_evt_rx.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_l2cap_evt_rx.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_l2cap_tx.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_l2cap_tx.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_tx_buffer_count_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_tx_buffer_count_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_uuid_decode.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_uuid_decode.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_uuid_encode.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_uuid_encode.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_uuid_vs_add.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_uuid_vs_add.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_version_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_version_get.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\power_system_off.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\power_system_off.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\temp_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\temp_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\struct_ser\s110\ble_gap_struct_serialization.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\struct_ser\s110\ble_gap_struct_serialization.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\struct_ser\s110\ble_gattc_struct_serialization.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\struct_ser\s110\ble_gattc_struct_serialization.c (C)
+
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\struct_ser\s110\ble_gatts_struct_serialization.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\struct_ser\s110\ble_struct_serialization.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\struct_ser\s110\ble_struct_serialization.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\ble_serialization.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\ble_serialization.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\cond_field_serialization.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\cond_field_serialization.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_enable.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_enable.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_opt_get.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_opt_get.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_opt_set.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\serializers\ble_opt_set.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble_gap.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble_gap.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble_gattc.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble_gattc.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble_gatts.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble_gatts.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble_l2cap.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_ble_l2cap.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_nrf_soc.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\codecs\s110\middleware\app_mw_nrf_soc.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\transport\ser_softdevice_handler.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\transport\ser_softdevice_handler.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\transport\ser_sd_transport.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\transport\ser_sd_transport.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\transport\ser_hal_transport.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\transport\ser_hal_transport.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\transport\app_mailbox.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\transport\app_mailbox.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\nrf_delay\nrf_delay.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\nrf_delay\nrf_delay.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_flash.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\ble\ble_flash.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\app_timer.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\app_timer.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\app_gpiote_fast_detect.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\app_gpiote_fast_detect.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\pstorage.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\pstorage.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\ser_app_hal_nrf51.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\ser_app_hal_nrf51.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\app_scheduler.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\app_scheduler.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\ser_app_power_system_off.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\application\hal\ser_app_power_system_off.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\app_uart.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\app_common\app_uart.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\transport\ser_phy_hci.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\transport\ser_phy_hci.c (C)
+
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\transport\ser_phy_hci_slip.c (C)
+--- Module:   C:\bamboo\xml-data\build-dir\HUSS-SDK61-SDKMAINJOB\Nordic\nrf51\Source\serialization\common\transport\ser_phy_hci_slip.c (C)
+
