@@ -53,8 +53,6 @@
 #define BOND_DELETE_ALL_BUTTON_ID            BUTTON_1                                   /**< Button used for deleting all bonded centrals during startup. */
 
 #define ADVERTISING_LED_PIN_NO               20                                         /**< Is on when device is advertising. */
-#define CONNECTED_LED_PIN_NO                 LED_2                                      /**< Is on when device has connected. */
-#define ASSERT_LED_PIN_NO                    LED_7                                      /**< Is on when application has asserted. */
 
 #define DEVICE_NAME                          "BLEKey"                                   /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME                    "Nobody"                                   /**< Manufacturer. Will be passed to Device Information Service. */
@@ -130,8 +128,6 @@ static ble_dfu_t                             m_dfus;                            
  */
 void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p_file_name)
 {
-    nrf_gpio_pin_set(ASSERT_LED_PIN_NO);
-
     // This call can be used for debug purposes during application development.
     // @note CAUTION: Activating this code will write the stack to flash on an error.
     //                This function should NOT be used in a final product.
@@ -156,8 +152,6 @@ void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p
     // disable INTs
     CRITICAL_REGION_ENTER();
     /* Light a LED on error or warning. */
-    nrf_gpio_cfg_output(SER_CONN_ASSERT_LED_PIN);
-    nrf_gpio_pin_set(SER_CONN_ASSERT_LED_PIN);
 
 //    m_p_file_name = p_file_name;
 //    m_error_code = error_code;
@@ -278,8 +272,6 @@ static void sensor_contact_detected_timeout_handler(void * p_context)
 static void leds_init(void)
 {
     nrf_gpio_cfg_output(ADVERTISING_LED_PIN_NO);
-    nrf_gpio_cfg_output(CONNECTED_LED_PIN_NO);
-    nrf_gpio_cfg_output(ASSERT_LED_PIN_NO);
 }
 
 
@@ -417,7 +409,6 @@ static void reset_prepare(void)
     }
 
     nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
-    nrf_gpio_pin_clear(CONNECTED_LED_PIN_NO);
 
     err_code = ble_conn_params_stop();
     APP_ERROR_CHECK(err_code);
@@ -640,14 +631,12 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
     switch (p_ble_evt->header.evt_id)
     {
     case BLE_GAP_EVT_CONNECTED:
-        nrf_gpio_pin_set(CONNECTED_LED_PIN_NO);
         nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
 
         m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
         break;
 
     case BLE_GAP_EVT_DISCONNECTED:
-        nrf_gpio_pin_clear(CONNECTED_LED_PIN_NO);
 
 
         advertising_start();
@@ -758,22 +747,6 @@ static void ble_stack_init(void)
     APP_ERROR_CHECK(err_code);
 }
 
-
-/**@brief Function for initializing buttons.
- */
-static void buttons_init(void)
-{
-    // Set Wakeup and Bonds Delete buttons as wakeup sources.
-    nrf_gpio_cfg_sense_input(WAKEUP_BUTTON_PIN,
-                             BUTTON_PULL,
-                             NRF_GPIO_PIN_SENSE_LOW);
-
-    nrf_gpio_cfg_sense_input(BOND_DELETE_ALL_BUTTON_ID,
-                             BUTTON_PULL,
-                             NRF_GPIO_PIN_SENSE_LOW);
-}
-
-
 /**@brief Function for handling the Device Manager events.
  *
  * @param[in]   p_evt   Data associated to the device manager event.
@@ -838,14 +811,12 @@ int main(void)
 
     // Initialize.
     leds_init();
-    buttons_init();
     timers_init();
     ble_stack_init();
     device_manager_init();
     gap_params_init();
     advertising_init();
     services_init();
-    sensor_sim_init();
     conn_params_init();
     
     wiegand_init();
