@@ -26,7 +26,7 @@ C_SOURCE_FILES += simple_uart.c
 
 SDK_PATH = ../nordic/nrf51822/
 
-OUTPUT_FILENAME := ble_app_hrs
+OUTPUT_FILENAME := blekey
 
 DEVICE_VARIANT := xxaa
 #DEVICE_VARIANT := xxab
