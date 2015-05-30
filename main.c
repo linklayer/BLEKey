@@ -37,7 +37,6 @@
 #include "dfu_app_handler.h"
 #include "ble_conn_params.h"
 #include "boards.h"
-#include "ble_sensorsim.h"
 #include "softdevice_handler.h"
 #include "app_timer.h"
 #include "ble_error_log.h"
@@ -99,11 +98,6 @@ static uint16_t                              m_conn_handle = BLE_CONN_HANDLE_INV
 static ble_gap_adv_params_t                  m_adv_params;                              /**< Parameters to be passed to the stack when starting advertising. */
 static ble_bas_t                             m_bas;                                     /**< Structure used to identify the battery service. */
 static ble_wiegand_t                         m_wiegand;                                 /**< Structure used to identify the heart rate service. */
-
-static ble_sensorsim_cfg_t                   m_battery_sim_cfg;                         /**< Battery Level sensor simulator configuration. */
-static ble_sensorsim_state_t                 m_battery_sim_state;                       /**< Battery Level sensor simulator state. */
-static ble_sensorsim_cfg_t                   m_heart_rate_sim_cfg;                      /**< Heart Rate sensor simulator configuration. */
-static ble_sensorsim_state_t                 m_heart_rate_sim_state;                    /**< Heart Rate sensor simulator state. */
 
 static app_timer_id_t                        m_battery_timer_id;                        /**< Battery timer. */
 static app_timer_id_t                        m_heart_rate_timer_id;                     /**< Heart rate measurement timer. */
@@ -190,7 +184,7 @@ static void battery_level_update(void)
     uint32_t err_code;
     uint8_t  battery_level;
 
-    battery_level = (uint8_t)ble_sensorsim_measure(&m_battery_sim_state, &m_battery_sim_cfg);
+    battery_level = 0x55;
 
     err_code = ble_bas_battery_level_update(&m_bas, battery_level);
     if ((err_code != NRF_SUCCESS) &&
@@ -502,27 +496,6 @@ static void services_init(void)
 }
 
 
-/**@brief Function for initializing the sensor simulators.
- */
-static void sensor_sim_init(void)
-{
-    m_battery_sim_cfg.min          = MIN_BATTERY_LEVEL;
-    m_battery_sim_cfg.max          = MAX_BATTERY_LEVEL;
-    m_battery_sim_cfg.incr         = BATTERY_LEVEL_INCREMENT;
-    m_battery_sim_cfg.start_at_max = true;
-
-    ble_sensorsim_init(&m_battery_sim_state, &m_battery_sim_cfg);
-
-    m_heart_rate_sim_cfg.min          = MIN_HEART_RATE;
-    m_heart_rate_sim_cfg.max          = MAX_HEART_RATE;
-    m_heart_rate_sim_cfg.incr         = HEART_RATE_INCREMENT;
-    m_heart_rate_sim_cfg.start_at_max = false;
-
-    ble_sensorsim_init(&m_heart_rate_sim_state, &m_heart_rate_sim_cfg);
-
-}
-
-
 /**@brief Function for starting application timers.
  */
 static void application_timers_start(void)
@@ -771,9 +744,6 @@ static void device_manager_init(void)
     // Initialize persistent storage module.
     err_code = pstorage_init();
     APP_ERROR_CHECK(err_code);
-
-    // Clear all bonded centrals if the Bonds Delete button is pushed.
-    init_data.clear_persistent_data = (nrf_gpio_pin_read(BOND_DELETE_ALL_BUTTON_ID) == 0);
 
     err_code = dm_init(&init_data);
     APP_ERROR_CHECK(err_code);
