@@ -15,11 +15,11 @@
 #define TIMER_DELAY 3000 // Timer is set at 1Mhz, 3000 ticks = 3ms
 #define MAX_BITS 100
 
-volatile uint8_t dataBits[MAX_BITS];
-volatile uint8_t bitCount = 0;
-volatile bool dataIncoming = false;
-volatile bool dataReady = false;
-volatile bool timerStarted = false;
+volatile uint8_t data_bits[MAX_BITS];
+volatile uint8_t bit_count = 0;
+volatile bool data_incoming = false;
+volatile bool data_ready = false;
+volatile bool timer_started = false;
 volatile uint32_t timerStop;
 
 void wiegand_init(void)
@@ -61,34 +61,34 @@ void wiegand_init(void)
 
 void wiegand_task(void)
 {
-    printf("timer %d, datardy %d, bitcount %d\r\n", timerStarted, dataReady, bitCount);
+    printf("timer %d, datardy %d, bitcount %d\r\n", timer_started, data_ready, bit_count);
 
-    if (dataIncoming && !timerStarted) {
+    if (data_incoming && !timer_started) {
         NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
-        timerStarted = true;
+        timer_started = true;
     }
 
-    if (dataReady) {
+    if (data_ready) {
         NRF_TIMER2->TASKS_STOP = 1;     // Stop the clock
-        if (bitCount > 1)   // avoid garbage data at startup.
+        if (bit_count > 1)   // avoid garbage data at startup.
         {
-            printf("Read %d bits: ", bitCount);
-            for (uint8_t i=0; i<bitCount; i++)
+            printf("Read %d bits: ", bit_count);
+            for (uint8_t i=0; i<bit_count; i++)
             {
-                printf("%d", dataBits[i]);
+                printf("%d", data_bits[i]);
             }
 
         }
 
-        dataIncoming = false;
-        timerStarted = false;
-        bitCount = 0;
-        dataReady = false;
+        data_incoming = false;
+        timer_started = false;
+        bit_count = 0;
+        data_ready = false;
 
         // clears the old data
         for (uint8_t i=0; i<MAX_BITS; i++)
         {
-            dataBits[i] = 0;
+            data_bits[i] = 0;
         }
     }
 }
@@ -97,7 +97,7 @@ void TIMER2_IRQHandler(void)
 {
     if (NRF_TIMER2->EVENTS_COMPARE[0])
     {
-        dataReady = true;
+        data_ready = true;
         NRF_TIMER2->EVENTS_COMPARE[0] = 0;           // Clear compare register 0 event
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY);
@@ -108,19 +108,19 @@ void GPIOTE_IRQHandler(void) {
     // This handler will be run after wakeup from system ON (GPIO wakeup)
     if(NRF_GPIOTE->EVENTS_PORT)
     {
-        volatile uint32_t portStatus = NRF_GPIO->IN;
+        volatile uint32_t port_status = NRF_GPIO->IN;
         NRF_GPIOTE->EVENTS_PORT = 0;    // Clear event
         // If DATA1 is low assign it, otherwise leave it at 0 and move on.
-        if (!(portStatus >> DATA1_IN & 1UL)) {
-            dataBits[bitCount] = 1;
+        if (!(port_status >> DATA1_IN & 1UL)) {
+            data_bits[bit_count] = 1;
             printf("1");
         } else {
-            dataBits[bitCount] = 0;
+            data_bits[bit_count] = 0;
             printf("0");
         }
-        dataIncoming = true;
+        ata_incoming = true;
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY); // Reset timer
-        bitCount++;
+        bit_count++;
     }
 }
