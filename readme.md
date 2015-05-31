@@ -21,3 +21,6 @@ J-Link>w4 4001e504 2
 J-Link>w4 4001e50c 1
 ```
 
+Notes:
+
+* Bluetooth Explorer is in the [Hardware IO Tools from Apple](http://adcdownload.apple.com/Developer_Tools/Hardware_IO_Tools_for_Xcode_6.3/HardwareIOTools_Xcode_6.3.dmg) it's probably the best BLE utility for Mac.
