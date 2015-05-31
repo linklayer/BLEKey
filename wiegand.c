@@ -27,27 +27,28 @@ void wiegand_init(void)
     retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Initializing wiegand shit...");
 
-
+	printf("Pin interrupts...");
     // Set up GPIO and pin interrupts
     nrf_gpio_cfg_sense_input(DATA0_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
     nrf_gpio_cfg_sense_input(DATA1_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
-
     // Set the GPIOTE PORT event as interrupt source, and enable interrupts for GPIOTE
     NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
     NVIC_EnableIRQ(GPIOTE_IRQn);
 
+	printf("Timers...");
     // set up timer 2
     // adapted from https://github.com/NordicSemiconductor/nrf51-TIMER-examples/blob/master/timer_example_timer_mode/main.c
     // and https://devzone.nordicsemi.com/question/6278/setting-timer2-interval/
     NRF_TIMER2->MODE = TIMER_MODE_MODE_Timer;  // Set the timer in Timer mode
     NRF_TIMER2->TASKS_CLEAR = 1;               // clear the task first to be usable for later
-    NRF_TIMER2->PRESCALER = 4;                 //Set prescaler. Higher number gives slower timer. Prescaler = 0 gives 16MHz timer
+    NRF_TIMER2->PRESCALER = 4;       //Set prescaler. Higher number gives slower timer. Prescaler = 0 gives 16MHz timer
     NRF_TIMER2->BITMODE = TIMER_BITMODE_BITMODE_16Bit;      //Set counter to 16 bit resolution
     NRF_TIMER2->CC[0] = TIMER_DELAY;                        //Set value for TIMER2 compare register 0
     // Enable interrupt on Timer 2 for CC[0]
     NRF_TIMER2->INTENSET = TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos;
     NVIC_EnableIRQ(TIMER2_IRQn);
 
+	printf("done\r\n");
 }
 
 /*
@@ -97,7 +98,8 @@ void TIMER2_IRQHandler(void)
 {
     if (NRF_TIMER2->EVENTS_COMPARE[0])
     {
-        data_ready = true;
+        printf("timer fired");
+		data_ready = true;
         NRF_TIMER2->EVENTS_COMPARE[0] = 0;           // Clear compare register 0 event
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY);
