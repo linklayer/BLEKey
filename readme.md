@@ -4,10 +4,15 @@ BLEKey
 Pinout
 ------
 
-| Pin	| What 	  		|
+Harware rev. 1
+
+| Pin	| Function 		|
 | ------|---------------|
-| 0     | Data 0  		|
-| 1		| Data 1		|
+| 0     | Data 0 in 	|
+| 1		| Data 1 in		|
+| ...	|				|
+| 9		| Serial		|
+| 11	| Serial		|
 
 Flashing
 --------
