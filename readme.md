@@ -1,6 +1,14 @@
 BLEKey
 ======
 
+Pinout
+------
+
+| Pin	| What 	  		|
+| ------|---------------|
+| 0     | Data 0  		|
+| 1		| Data 1		|
+
 Flashing
 --------
 
