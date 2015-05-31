@@ -783,13 +783,12 @@ int main(void)
     leds_init();
     timers_init();
     ble_stack_init();
+    wiegand_init();
     device_manager_init();
     gap_params_init();
     advertising_init();
     services_init();
     conn_params_init();
-    
-    wiegand_init();
 
     // Start execution.
     application_timers_start();

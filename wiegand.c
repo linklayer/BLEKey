@@ -2,11 +2,14 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "nrf51.h"
+#include "nrf.h" // added
+//#include "nrf51.h"
+//#include "nrf_gpiote.h" //added
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
 #include "retarget.h"
 #include "wiegand.h"
+#include "nrf_sdm.h" // added and now it builds! 
 
 // wiegand data pins
 #define DATA0_IN 0
@@ -33,7 +36,10 @@ void wiegand_init(void)
     nrf_gpio_cfg_sense_input(DATA1_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
     // Set the GPIOTE PORT event as interrupt source, and enable interrupts for GPIOTE
     NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
-    NVIC_EnableIRQ(GPIOTE_IRQn);
+    //NVIC_EnableIRQ(GPIOTE_IRQn);
+	sd_nvic_SetPriority(GPIOTE_IRQn, 1);
+    sd_nvic_ClearPendingIRQ(GPIOTE_IRQn);
+	sd_nvic_EnableIRQ(GPIOTE_IRQn);
 
 	printf("Timers...");
     // set up timer 2
@@ -46,7 +52,10 @@ void wiegand_init(void)
     NRF_TIMER2->CC[0] = TIMER_DELAY;                        //Set value for TIMER2 compare register 0
     // Enable interrupt on Timer 2 for CC[0]
     NRF_TIMER2->INTENSET = TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos;
-    NVIC_EnableIRQ(TIMER2_IRQn);
+    //NVIC_EnableIRQ(TIMER2_IRQn);
+    sd_nvic_SetPriority(TIMER2_IRQn, 3);
+    sd_nvic_ClearPendingIRQ(TIMER2_IRQn);
+	sd_nvic_EnableIRQ(TIMER2_IRQn);
 
 	printf("done\r\n");
 }
@@ -62,7 +71,7 @@ void wiegand_init(void)
 
 void wiegand_task(void)
 {
-    printf("timer %d, datardy %d, bitcount %d\r\n", timer_started, data_ready, bit_count);
+   printf("timer %d, datardy %d, bitcount %d\r\n", timer_started, data_ready, bit_count);
 
     if (data_incoming && !timer_started) {
         NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
@@ -98,7 +107,7 @@ void TIMER2_IRQHandler(void)
 {
     if (NRF_TIMER2->EVENTS_COMPARE[0])
     {
-        printf("timer fired");
+        printf("Timer fired...\r\n");
 		data_ready = true;
         NRF_TIMER2->EVENTS_COMPARE[0] = 0;           // Clear compare register 0 event
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;

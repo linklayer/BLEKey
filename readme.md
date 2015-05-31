@@ -4,7 +4,7 @@ BLEKey
 Pinout
 ------
 
-Harware rev. 1
+Harware rev. 1 code name Acamas 
 
 | Pin	| Function 		|
 | ------|---------------|
