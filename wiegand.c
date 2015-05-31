@@ -120,7 +120,7 @@ void GPIOTE_IRQHandler(void) {
             data_bits[bit_count] = 0;
             printf("0");
         }
-        ata_incoming = true;
+        data_incoming = true;
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY); // Reset timer
         bit_count++;
