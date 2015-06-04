@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "nrf.h" // added
 //#include "nrf51.h"
@@ -9,7 +10,8 @@
 #include "nrf_delay.h"
 #include "retarget.h"
 #include "wiegand.h"
-#include "nrf_sdm.h" // added and now it builds! 
+#include "nrf_sdm.h" // added and now it builds!
+#include "ble_wiegand.h"
 
 // wiegand data pins
 #define DATA0_IN 0
@@ -25,23 +27,27 @@ volatile bool data_ready = false;
 volatile bool timer_started = false;
 volatile uint32_t timerStop;
 
-void wiegand_init(void)
+static struct wiegand_ctx *p_ctx;
+
+void wiegand_init(struct wiegand_ctx *ctx)
 {
+    p_ctx = ctx;
+
     retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Initializing wiegand shit...");
 
-	printf("Pin interrupts...");
+    printf("Pin interrupts...");
     // Set up GPIO and pin interrupts
     nrf_gpio_cfg_sense_input(DATA0_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
     nrf_gpio_cfg_sense_input(DATA1_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
     // Set the GPIOTE PORT event as interrupt source, and enable interrupts for GPIOTE
     NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
     //NVIC_EnableIRQ(GPIOTE_IRQn);
-	sd_nvic_SetPriority(GPIOTE_IRQn, 1);
+    sd_nvic_SetPriority(GPIOTE_IRQn, 1);
     sd_nvic_ClearPendingIRQ(GPIOTE_IRQn);
-	sd_nvic_EnableIRQ(GPIOTE_IRQn);
+    sd_nvic_EnableIRQ(GPIOTE_IRQn);
 
-	printf("Timers...");
+    printf("Timers...");
     // set up timer 2
     // adapted from https://github.com/NordicSemiconductor/nrf51-TIMER-examples/blob/master/timer_example_timer_mode/main.c
     // and https://devzone.nordicsemi.com/question/6278/setting-timer2-interval/
@@ -55,9 +61,9 @@ void wiegand_init(void)
     //NVIC_EnableIRQ(TIMER2_IRQn);
     sd_nvic_SetPriority(TIMER2_IRQn, 3);
     sd_nvic_ClearPendingIRQ(TIMER2_IRQn);
-	sd_nvic_EnableIRQ(TIMER2_IRQn);
+    sd_nvic_EnableIRQ(TIMER2_IRQn);
 
-	printf("done\r\n");
+    printf("done\r\n");
 }
 
 /*
@@ -69,9 +75,20 @@ void wiegand_init(void)
   }
 */
 
+void add_card(uint8_t *data, uint8_t len) {
+    // shift cards over 
+    memcpy(&(p_ctx->card_store[1]), p_ctx->card_store, 
+	   sizeof(p_ctx->card_store) - sizeof(struct card));
+
+    // add card to store
+    p_ctx->card_store[0].bit_len = len;
+    memcpy(p_ctx->card_store[0].data, data, (len/8+1));
+
+}
+
 void wiegand_task(void)
 {
-   printf("timer %d, datardy %d, bitcount %d\r\n", timer_started, data_ready, bit_count);
+    printf("timer %d, datardy %d, bitcount %d\r\n", timer_started, data_ready, bit_count);
 
     if (data_incoming && !timer_started) {
         NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
@@ -108,10 +125,11 @@ void TIMER2_IRQHandler(void)
     if (NRF_TIMER2->EVENTS_COMPARE[0])
     {
         printf("Timer fired...\r\n");
-		data_ready = true;
+        data_ready = true;
         NRF_TIMER2->EVENTS_COMPARE[0] = 0;           // Clear compare register 0 event
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY);
+
     }
 }
 

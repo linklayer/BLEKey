@@ -8,7 +8,7 @@
 
 // service defines
 #define BLE_UUID_WIEGAND_LAST_CARDS	0xAAAA				
-#define WIEGAND_LAST_CARDS_MAX_LEN	20
+#define WIEGAND_LAST_CARDS_MAX_LEN	22
 #define BLE_UUID_WIEGAND_REPLAY		0xBBBB	
 #define BLE_UUID_WIEGAND_SEND_DATA      0xCCCC	
 #define BLE_UUID_WIEGAND_SEND_DATA_LEN  20
@@ -52,7 +52,7 @@ typedef struct ble_wiegand_s
     bool                         is_expended_energy_supported;                         /**< TRUE if Expended Energy measurement is supported. */
     bool                         is_sensor_contact_supported;                          /**< TRUE if sensor contact detection is supported. */
     uint16_t                     service_handle;                                       /**< Handle of Heart Rate Service (as provided by the BLE stack). */
-    ble_gatts_char_handles_t     card_read_handles;                             	/**< Handles related to the Heart Rate Measurement characteristic. */
+    ble_gatts_char_handles_t     last_cards_handles;                             	/**< Handles related to the Heart Rate Measurement characteristic. */
     ble_gatts_char_handles_t     replay_handles;                                       /**< Handles related to the Body Sensor Location characteristic. */
     ble_gatts_char_handles_t     send_data_handles;                                    /**< Handles related to the Heart Rate Control Point characteristic. */
     ble_gatts_char_handles_t     data_length_handles;                                  /**< Handles related to the Heart Rate Control Point characteristic. */

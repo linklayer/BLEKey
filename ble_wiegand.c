@@ -57,7 +57,7 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
     static uint8_t read_cnt = 0;
     ble_gatts_evt_write_t * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
 
-    if (p_evt_write->handle == p_wiegand->card_read_handles.cccd_handle)
+    if (p_evt_write->handle == p_wiegand->last_cards_handles.cccd_handle)
     {
         return;
     }
@@ -148,15 +148,15 @@ static uint32_t last_cards_char_add(ble_wiegand_t            * p_wiegand,
 
     attr_char_value.p_uuid    = &ble_uuid;
     attr_char_value.p_attr_md = &attr_md;
-    attr_char_value.init_len  = 0;
+    attr_char_value.init_len  = 22;
     attr_char_value.init_offs = 0;
-    attr_char_value.max_len   = WIEGAND_LAST_CARDS_MAX_LEN;
+    attr_char_value.max_len   = 22;
     attr_char_value.p_value   = 0;
 
     return sd_ble_gatts_characteristic_add(p_wiegand->service_handle,
                                            &char_md,
                                            &attr_char_value,
-                                           &p_wiegand->card_read_handles);
+                                           &p_wiegand->last_cards_handles);
 }
 
 /**@brief Function for adding the Body Sensor Location characteristic.
@@ -386,6 +386,6 @@ uint32_t ble_wiegand_body_sensor_location_set(ble_wiegand_t * p_wiegand, uint8_t
 
 uint32_t ble_wiegand_last_cards_set(ble_wiegand_t * p_wiegand, uint8_t *cards, uint16_t len)
 {
-    return sd_ble_gatts_value_set(p_wiegand->card_read_handles.value_handle,
+    return sd_ble_gatts_value_set(p_wiegand->last_cards_handles.value_handle,
                                   0, &len, cards);
 }

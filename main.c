@@ -223,21 +223,10 @@ static void battery_level_meas_timeout_handler(void * p_context)
 static void heart_rate_meas_timeout_handler(void * p_context)
 {
     static uint8_t cnt = 0;
-    uint32_t       err_code;
 
     UNUSED_PARAMETER(p_context);
 
     cnt++;
-    err_code = ble_wiegand_last_cards_set(&m_wiegand, &cnt, 1);
-    if ((err_code != NRF_SUCCESS) &&
-        (err_code != NRF_ERROR_INVALID_STATE) &&
-        (err_code != BLE_ERROR_NO_TX_BUFFERS) &&
-        (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
-        )
-    {
-        APP_ERROR_HANDLER(err_code);
-    }
-
 }
 
 
@@ -699,8 +688,8 @@ static void ble_stack_init(void)
     uint32_t err_code;
 
     // Initialize the SoftDevice handler module.
-    SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_RC_250_PPM_250MS_CALIBRATION, 
-			    false);
+    SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_RC_250_PPM_250MS_CALIBRATION,
+                            false);
 
 #ifdef S110
     // Enable BLE stack
@@ -778,12 +767,14 @@ static void power_manage(void)
  */
 int main(void)
 {
+    // initialze wiegand context data struct
+    struct wiegand_ctx wiegand_ctx;
 
     // Initialize.
     leds_init();
     timers_init();
     ble_stack_init();
-    wiegand_init();
+    wiegand_init(&wiegand_ctx);
     device_manager_init();
     gap_params_init();
     advertising_init();
@@ -794,10 +785,28 @@ int main(void)
     application_timers_start();
     advertising_start();
 
+
+    uint8_t i;
+    uint8_t buf[22];
+    uint8_t testbuf[6];
+    for (i=0; i<6; i++) {
+        testbuf[i] = i;
+    }
+    
+    add_card(testbuf, 44);
+    add_card(testbuf, 44);
+    add_card(testbuf, 44);
+
+    uint32_t err_code;
     // Enter main loop.
     for (;;)
     {
-	wiegand_task();
-    power_manage();
+        wiegand_task();
+        memcpy(buf, wiegand_ctx.card_store, 22);
+        err_code = ble_wiegand_last_cards_set(&m_wiegand, buf, 22);
+        if (err_code != NRF_SUCCESS) {
+            for(;;);
+        }
+        power_manage();
     }
 }
