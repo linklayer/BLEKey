@@ -16,6 +16,8 @@
 // wiegand data pins
 #define DATA0_IN 0
 #define DATA1_IN 1
+#define DATA0_CTL 2
+#define DATA1_CTL 3
 
 #define TIMER_DELAY 3000 // Timer is set at 1Mhz, 3000 ticks = 3ms
 #define MAX_BITS 100
@@ -36,6 +38,12 @@ void wiegand_init(struct wiegand_ctx *ctx)
     retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Initializing wiegand shit...");
 
+	// Set the control lines as outputs and pull them low
+	nrf_gpio_cfg_output(DATA0_CTL);
+	nrf_gpio_cfg_output(DATA1_CTL);
+	nrf_gpio_pin_clear(DATA0_CTL);
+	nrf_gpio_pin_clear(DATA1_CTL);
+
     printf("Pin interrupts...");
     // Set up GPIO and pin interrupts
     nrf_gpio_cfg_sense_input(DATA0_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
@@ -43,7 +51,7 @@ void wiegand_init(struct wiegand_ctx *ctx)
     // Set the GPIOTE PORT event as interrupt source, and enable interrupts for GPIOTE
     NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
     //NVIC_EnableIRQ(GPIOTE_IRQn);
-    sd_nvic_SetPriority(GPIOTE_IRQn, 1);
+    sd_nvic_SetPriority(GPIOTE_IRQn, 3);
     sd_nvic_ClearPendingIRQ(GPIOTE_IRQn);
     sd_nvic_EnableIRQ(GPIOTE_IRQn);
 
@@ -59,21 +67,12 @@ void wiegand_init(struct wiegand_ctx *ctx)
     // Enable interrupt on Timer 2 for CC[0]
     NRF_TIMER2->INTENSET = TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos;
     //NVIC_EnableIRQ(TIMER2_IRQn);
-    sd_nvic_SetPriority(TIMER2_IRQn, 3);
     sd_nvic_ClearPendingIRQ(TIMER2_IRQn);
+    sd_nvic_SetPriority(TIMER2_IRQn, 1);
     sd_nvic_EnableIRQ(TIMER2_IRQn);
 
     printf("done\r\n");
 }
-
-/*
-  static uint8_t pin_read(uint8_t pin_number)
-  {
-  // Borrowed from:
-  // http://developer.mbed.org/teams/Nordic-Semiconductor/code/nRF51822/docs/3794dc9540f0/nrf__gpio_8h_source.html
-  return ((NRF_GPIO->IN >> pin_number) & 1UL);
-  }
-*/
 
 void add_card(uint8_t *data, uint8_t len) {
     // shift cards over 
@@ -88,15 +87,13 @@ void add_card(uint8_t *data, uint8_t len) {
 
 void wiegand_task(void)
 {
-    printf("timer %d, datardy %d, bitcount %d\r\n", timer_started, data_ready, bit_count);
-
     if (data_incoming && !timer_started) {
-        NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
+		NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
         timer_started = true;
     }
 
     if (data_ready) {
-        NRF_TIMER2->TASKS_STOP = 1;     // Stop the clock
+        //NRF_TIMER2->TASKS_STOP = 1;     // Stop the clock
         if (bit_count > 1)   // avoid garbage data at startup.
         {
             printf("Read %d bits: ", bit_count);
@@ -104,6 +101,7 @@ void wiegand_task(void)
             {
                 printf("%d", data_bits[i]);
             }
+			printf("\r\n");
 
         }
 
@@ -124,10 +122,10 @@ void TIMER2_IRQHandler(void)
 {
     if (NRF_TIMER2->EVENTS_COMPARE[0])
     {
-        printf("Timer fired...\r\n");
         data_ready = true;
         NRF_TIMER2->EVENTS_COMPARE[0] = 0;           // Clear compare register 0 event
-        NRF_TIMER2->TASKS_CAPTURE[1] = 1;
+        NRF_TIMER2->TASKS_STOP = 1;     // Stop the timer 
+		NRF_TIMER2->TASKS_CAPTURE[1] = 1;
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY);
 
     }
@@ -142,10 +140,8 @@ void GPIOTE_IRQHandler(void) {
         // If DATA1 is low assign it, otherwise leave it at 0 and move on.
         if (!(port_status >> DATA1_IN & 1UL)) {
             data_bits[bit_count] = 1;
-            printf("1");
         } else {
             data_bits[bit_count] = 0;
-            printf("0");
         }
         data_incoming = true;
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task

@@ -787,26 +787,23 @@ int main(void)
 
 
     uint8_t i;
-    uint8_t buf[22];
+    //uint8_t buf[22];
     uint8_t testbuf[6];
     for (i=0; i<6; i++) {
         testbuf[i] = i;
     }
-    
+
     add_card(testbuf, 44);
     add_card(testbuf, 44);
     add_card(testbuf, 44);
 
-    uint32_t err_code;
+    //uint32_t err_code;
     // Enter main loop.
     for (;;)
     {
         wiegand_task();
-        memcpy(buf, wiegand_ctx.card_store, 22);
-        err_code = ble_wiegand_last_cards_set(&m_wiegand, buf, 22);
-        if (err_code != NRF_SUCCESS) {
-            for(;;);
-        }
+        //memcpy(buf, wiegand_ctx.card_store, 22);
+        //err_code = ble_wiegand_last_cards_set(&m_wiegand, buf, 22);
         power_manage();
     }
 }
