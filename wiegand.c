@@ -51,7 +51,7 @@ void wiegand_init(struct wiegand_ctx *ctx)
     // Set the GPIOTE PORT event as interrupt source, and enable interrupts for GPIOTE
     NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
     //NVIC_EnableIRQ(GPIOTE_IRQn);
-    sd_nvic_SetPriority(GPIOTE_IRQn, 3);
+    sd_nvic_SetPriority(GPIOTE_IRQn, 1);
     sd_nvic_ClearPendingIRQ(GPIOTE_IRQn);
     sd_nvic_EnableIRQ(GPIOTE_IRQn);
 
@@ -68,7 +68,7 @@ void wiegand_init(struct wiegand_ctx *ctx)
     NRF_TIMER2->INTENSET = TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos;
     //NVIC_EnableIRQ(TIMER2_IRQn);
     sd_nvic_ClearPendingIRQ(TIMER2_IRQn);
-    sd_nvic_SetPriority(TIMER2_IRQn, 1);
+    sd_nvic_SetPriority(TIMER2_IRQn, 3);
     sd_nvic_EnableIRQ(TIMER2_IRQn);
 
     printf("done\r\n");
@@ -133,19 +133,21 @@ void TIMER2_IRQHandler(void)
 
 void GPIOTE_IRQHandler(void) {
     // This handler will be run after wakeup from system ON (GPIO wakeup)
-    if(NRF_GPIOTE->EVENTS_PORT)
-    {
-        volatile uint32_t port_status = NRF_GPIO->IN;
-        NRF_GPIOTE->EVENTS_PORT = 0;    // Clear event
+    //if(NRF_GPIOTE->EVENTS_PORT)
+    //{
+		uint32_t port_status = NRF_GPIO->IN;
+		NRF_GPIOTE->EVENTS_PORT = 0;    // Clear event
         // If DATA1 is low assign it, otherwise leave it at 0 and move on.
         if (!(port_status >> DATA1_IN & 1UL)) {
             data_bits[bit_count] = 1;
-        } else {
+        } else if (!(port_status >> DATA0_IN & 1UL)) {
             data_bits[bit_count] = 0;
-        }
-        data_incoming = true;
+        } else {
+			data_bits[bit_count] = 9;
+		}
+		data_incoming = true;
         NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY); // Reset timer
         bit_count++;
-    }
+    //}
 }
