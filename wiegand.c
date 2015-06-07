@@ -34,6 +34,7 @@ volatile uint32_t timerStop;
 
 static struct wiegand_ctx *p_ctx;
 
+// static value that needs to be prepended to HID Prox cards
 static const uint16_t padding[19] =
 {
     0, 0, 0, 0, 0, 0, 0, 0, 0x3, 0x5, 0x9, 0x11, 0x21,
@@ -47,7 +48,7 @@ void wiegand_init(struct wiegand_ctx *ctx)
     retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Initializing wiegand shit...");
 
-    // Set the control lines as outputs and pull them low
+    // Set the Wiegand control lines as outputs and pull them low
     nrf_gpio_cfg_output(DATA0_CTL);
     nrf_gpio_cfg_output(DATA1_CTL);
     nrf_gpio_pin_clear(DATA0_CTL);
@@ -83,15 +84,14 @@ void wiegand_init(struct wiegand_ctx *ctx)
     printf("done\r\n");
 }
 
-void add_card(uint64_t *data, uint8_t len) {
+void add_card(uint64_t *data, uint8_t len) 
+{
     // shift cards over
     memcpy(&(p_ctx->card_store[1]), p_ctx->card_store,
            sizeof(p_ctx->card_store) - sizeof(struct card));
-
     // add card to store
     p_ctx->card_store[0].bit_len = len;
     memcpy(p_ctx->card_store[0].data, data, (len/8+1));
-
 }
 
 void wiegand_task(void)
@@ -107,6 +107,7 @@ void wiegand_task(void)
             uint8_t pad_len = (MAX_LEN - bit_count);
             printf("Read %d bits: ", bit_count);
 
+			// add the the pad bits to the read card
             uint64_t card_val = padding[pad_len];
             card_val <<= bit_count;
             card_val |= card_data;
@@ -115,20 +116,18 @@ void wiegand_task(void)
             {
                 printf("%d", data_bits[i]);
             }
-            printf( " 0x%llx \r\n", card_val);
+            printf( " 0x%llx\r\n", card_val);
 	    // add card to struct for BLE transmission
 	    add_card(&card_val, bit_count);
-
         }
 
-        data_incoming = false;
+        //reset vars for next read
+		data_incoming = false;
         timer_started = false;
         bit_count = 0;
         data_ready = false;
         card_data = 0;
         card_fubar = false;
-
-        // clears the old data
         for (uint8_t i=0; i<MAX_BITS; i++)
         {
             data_bits[i] = 0;
