@@ -83,7 +83,7 @@ void wiegand_init(struct wiegand_ctx *ctx)
     printf("done\r\n");
 }
 
-void add_card(uint8_t *data, uint8_t len) {
+void add_card(uint64_t *data, uint8_t len) {
     // shift cards over
     memcpy(&(p_ctx->card_store[1]), p_ctx->card_store,
            sizeof(p_ctx->card_store) - sizeof(struct card));

@@ -17,5 +17,5 @@ struct wiegand_ctx {
 
 void wiegand_init(struct wiegand_ctx *ctx);
 void wiegand_task(void);
-void add_card(uint8_t *data, uint8_t len);
+void add_card(uint64_t *data, uint8_t len);
 #endif /* WIEGAND_H_ */
