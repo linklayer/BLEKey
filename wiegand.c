@@ -20,17 +20,16 @@
 #define DATA1_CTL 3
 
 #define TIMER_DELAY 3000 // Timer is set at 1Mhz, 3000 ticks = 3ms
-#define MAX_BITS 100
 #define MAX_LEN 44
 
-volatile uint64_t card_data = 0;
-volatile uint8_t data_bits[MAX_BITS];
+uint64_t last_card = 0; // holds value of last card for ease of re-transmission
+uint8_t last_size = 0;
+volatile uint64_t card_data = 0; // incoming wiegand data stored here
 volatile uint8_t bit_count = 0;
 volatile bool data_incoming = false;
 volatile bool data_ready = false;
 volatile bool timer_started = false;
 volatile bool card_fubar = false;       // set if BLE screws up an incoming card
-volatile uint32_t timerStop;
 
 static struct wiegand_ctx *p_ctx;
 
@@ -94,6 +93,16 @@ void add_card(uint64_t *data, uint8_t len)
     memcpy(p_ctx->card_store[0].data, data, (len/8+1));
 }
 
+/*
+void tx_wiegand(uint64_t *data, uint8_t size)
+{
+	for (uint8_t i=0; i<size; i++) {
+
+	}
+
+}
+*/
+
 void wiegand_task(void)
 {
     if (data_incoming && !timer_started) {
@@ -105,18 +114,24 @@ void wiegand_task(void)
         if (bit_count > 1 && !card_fubar)   // avoid garbage data at startup.
         {
             uint8_t pad_len = (MAX_LEN - bit_count);
-            printf("Read %d bits: ", bit_count);
+			last_card = card_data;
+			last_size = bit_count;
+
+			printf("Read %d bits: ", bit_count);
 
 			// add the the pad bits to the read card
             uint64_t card_val = padding[pad_len];
             card_val <<= bit_count;
             card_val |= card_data;
 
-            for (uint8_t i=0; i<bit_count; i++)
+			for (uint8_t i=0; i<bit_count; i++)
             {
-                printf("%d", data_bits[i]);
+                // bit shift out each bit of the card
+				uint8_t bit = (last_card >> (bit_count-(i+1))) & 1ULL;
+				printf("%d", bit);
             }
-            printf( " 0x%llx\r\n", card_val);
+
+			printf( " 0x%llx\r\n", card_val);
 	    // add card to struct for BLE transmission
 	    add_card(&card_val, bit_count);
         }
@@ -124,14 +139,10 @@ void wiegand_task(void)
         //reset vars for next read
 		data_incoming = false;
         timer_started = false;
-        bit_count = 0;
         data_ready = false;
-        card_data = 0;
         card_fubar = false;
-        for (uint8_t i=0; i<MAX_BITS; i++)
-        {
-            data_bits[i] = 0;
-        }
+        bit_count = 0;
+        card_data = 0;
     }
 }
 
@@ -155,13 +166,11 @@ void GPIOTE_IRQHandler(void)
     NRF_GPIOTE->EVENTS_PORT = 0;    // Clear event
     card_data <<= 1;
     if (!(port_status >> DATA1_IN & 1UL)) {
-        data_bits[bit_count] = 1;
         card_data |= 1;
     } else if (!(port_status >> DATA0_IN & 1UL)) {
-        data_bits[bit_count] = 0;
+        // 0 is already assigned, don't need to do anything
     } else {
         // port status lost thanks to BLE delaying read.
-        data_bits[bit_count] = 9;
         card_fubar = true;
     }
     data_incoming = true;
