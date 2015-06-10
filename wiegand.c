@@ -22,15 +22,15 @@
 #define TIMER_DELAY 3000 // Timer is set at 1Mhz, 3000 ticks = 3ms
 #define MAX_LEN 44
 
-uint64_t last_card = 0; // holds value of last card for ease of re-transmission
-uint8_t last_size = 0;
-volatile uint64_t card_data = 0; // incoming wiegand data stored here
-volatile uint8_t bit_count = 0;
-volatile bool data_incoming = false;
-volatile bool data_ready = false;
-volatile bool timer_started = false;
+uint64_t last_card = 0; 				// unpadded last card for ease of re-transmission
+uint8_t last_size = 0;					// number of bits in last card
+volatile uint64_t card_data = 0; 		// incoming wiegand data stored here
+volatile uint8_t bit_count = 0;			// number of bits in the incoming card
+volatile bool data_incoming = false;	// true when data starts coming in
+volatile bool data_ready = false;		// set when timer interrupt fires
+volatile bool timer_started = false;	// if recv wiegand
 volatile bool card_fubar = false;       // set if BLE screws up an incoming card
-volatile bool send_wiegand = false;
+volatile bool send_wiegand = false;		// triggers sending of wiegand data
 
 static struct wiegand_ctx *p_ctx;
 
@@ -112,12 +112,12 @@ void wiegand_task(void)
 		r = sd_nvic_critical_region_enter(&foo);
 		if (r == NRF_SUCCESS)
 		{
-			printf("Critical Region Success");
+			printf("success - disabled application interrupts\r\n");
 		}
 		//send wiegand data
 		sd_nvic_critical_region_exit(foo);
 	}
-	
+
 	if (data_incoming && !timer_started) {
         NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
         timer_started = true;
