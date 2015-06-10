@@ -30,7 +30,7 @@ volatile bool data_incoming = false;	// true when data starts coming in
 volatile bool data_ready = false;		// set when timer interrupt fires
 volatile bool timer_started = false;	// if recv wiegand
 volatile bool card_fubar = false;       // set if BLE screws up an incoming card
-volatile bool send_wiegand = false;		// triggers sending of wiegand data
+volatile bool start_tx = false;			// triggers sending of wiegand data
 
 static struct wiegand_ctx *p_ctx;
 
@@ -94,6 +94,13 @@ void add_card(uint64_t *data, uint8_t len)
     memcpy(p_ctx->card_store[0].data, data, (len/8+1));
 }
 
+void send_wiegand(void)
+{
+	// exposed externally to start wiegand TX from BLE
+	start_tx = true;
+}
+
+
 /*
 void tx_wiegand(uint64_t *data, uint8_t size)
 {
@@ -106,7 +113,7 @@ void tx_wiegand(uint64_t *data, uint8_t size)
 
 void wiegand_task(void)
 {
-    if (send_wiegand && !timer_started) {
+    if (start_tx && !timer_started) {
 		uint32_t r;
 		uint8_t foo;
 		r = sd_nvic_critical_region_enter(&foo);
