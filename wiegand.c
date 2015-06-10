@@ -30,6 +30,7 @@ volatile bool data_incoming = false;
 volatile bool data_ready = false;
 volatile bool timer_started = false;
 volatile bool card_fubar = false;       // set if BLE screws up an incoming card
+volatile bool send_wiegand = false;
 
 static struct wiegand_ctx *p_ctx;
 
@@ -105,7 +106,19 @@ void tx_wiegand(uint64_t *data, uint8_t size)
 
 void wiegand_task(void)
 {
-    if (data_incoming && !timer_started) {
+    if (send_wiegand && !timer_started) {
+		uint32_t r;
+		uint8_t foo;
+		r = sd_nvic_critical_region_enter(&foo);
+		if (r == NRF_SUCCESS)
+		{
+			printf("Critical Region Success");
+		}
+		//send wiegand data
+		sd_nvic_critical_region_exit(foo);
+	}
+	
+	if (data_incoming && !timer_started) {
         NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
         timer_started = true;
     }
