@@ -22,6 +22,7 @@
 #include "ble_srv_common.h"
 #include "app_util.h"
 #include "nrf_gpio.h"
+#include "wiegand.h"
 
 #define BLE_UUID_WIEGAND_SERVICE        0xABCD
 
@@ -63,6 +64,7 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
     }
     if (p_evt_write->handle == p_wiegand->replay_handles.value_handle)
     {
+	send_wiegand();
         if (read_cnt % 2) {
             nrf_gpio_pin_clear(8);
             nrf_gpio_pin_clear(9);
