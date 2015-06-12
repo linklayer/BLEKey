@@ -49,8 +49,29 @@ Using BLEKey
 
 Find your Bluetooth device with `hcitool dev` scan for BLEKey with `hcitool -i <dev> lescan`
 
+Start an interactive connection to BLEKey
 
-Tell BLEKey to send Wiegand data:
+```
+[blark@archvm blekey]$ sudo gatttool -t random -b D4:34:E8:CA:6F:6A -I
+[D4:34:E8:CA:6F:6A][LE]> connect
+Attempting to connect to D4:34:E8:CA:6F:6A
+Connection successful
+[D4:34:E8:CA:6F:6A][LE]> characteristics
+handle: 0x0002, char properties: 0x0a, char value handle: 0x0003, uuid: 00002a00-0000-1000-8000-00805f9b34fb
+handle: 0x0004, char properties: 0x02, char value handle: 0x0005, uuid: 00002a01-0000-1000-8000-00805f9b34fb
+handle: 0x0006, char properties: 0x02, char value handle: 0x0007, uuid: 00002a04-0000-1000-8000-00805f9b34fb
+handle: 0x000a, char properties: 0x02, char value handle: 0x000b, uuid: 0000aaaa-0000-1000-8000-00805f9b34fb
+handle: 0x000c, char properties: 0x08, char value handle: 0x000d, uuid: 0000bbbb-0000-1000-8000-00805f9b34fb
+handle: 0x000e, char properties: 0x08, char value handle: 0x000f, uuid: 0000cccc-0000-1000-8000-00805f9b34fb
+handle: 0x0010, char properties: 0x0a, char value handle: 0x0011, uuid: 0000dddd-0000-1000-8000-00805f9b34fb
+handle: 0x0013, char properties: 0x12, char value handle: 0x0014, uuid: 00002a19-0000-1000-8000-00805f9b34fb
+handle: 0x0017, char properties: 0x02, char value handle: 0x0018, uuid: 00002a29-0000-1000-8000-00805f9b34fb
+
+```
+
+Last three Wiegand cards are stored in the `0x000b` handle. Currently to cause BLEKey to send out the last read card on the Wiegand lines write to `0x000d`
+
+You can also just use gatttool from the command line to yell BLEKey to send Wiegand data (replace with the address of your device):
 ```
 sudo gatttool -t random -b D4:34:E8:CA:6F:6A --char-write-req -a 0x000d -n 01
 ```
