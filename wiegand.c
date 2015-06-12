@@ -126,19 +126,28 @@ void tx_wiegand(uint64_t data, uint8_t size)
         }
 }
 
+uint64_t pad_card(uint64_t data, uint8_t size)
+{
+    uint8_t pad_len = (MAX_LEN - size);
+    uint64_t card_val = padding[pad_len];
+    card_val <<= size;
+    card_val |= data;
+    return card_val;
+}
 
 void wiegand_task(void)
 {
     if (start_tx && !timer_started) {
         uint32_t ret;
         uint8_t foo;
+        // this turns off application interrupts (not softdevice)
         ret = sd_nvic_critical_region_enter(&foo);
         if (ret == NRF_SUCCESS)
         {
+            // send the data on the Wiegands
             tx_wiegand(last_card, last_size);
-            printf("Wiegandses pwned!\r\n");
+            printf("Sent %d bits: 0x%llx, Wiegandses pwned!\r\n", last_size, pad_card(last_card, last_size));
         }
-        //send wiegand data
         sd_nvic_critical_region_exit(foo);
         start_tx = false;
     }
@@ -151,25 +160,19 @@ void wiegand_task(void)
     if (data_ready) {
         if (bit_count > 1 && !card_fubar)   // avoid garbage data at startup.
         {
-            uint8_t pad_len = (MAX_LEN - bit_count);
+            // store the card's information for replay later
             last_card = card_data;
             last_size = bit_count;
-
+            // print debug information to the serial terminal
             printf("Read %d bits: ", bit_count);
-
-            // add the the pad bits to the read card
-            uint64_t card_val = padding[pad_len];
-            card_val <<= bit_count;
-            card_val |= card_data;
-
             for (uint8_t i = last_size; i-- > 0;)
             {
                 printf("%lld", GETBIT(last_card, i));
             }
-
-            printf( " 0x%llx\r\n", card_val);
-        // add card to struct for BLE transmission
-        add_card(&card_val, bit_count);
+            uint64_t full_card = pad_card(card_data, bit_count);
+            printf( " 0x%llx\r\n", full_card);
+            // add card to struct for BLE transmission
+            add_card(&full_card, bit_count);
         }
 
         //reset vars for next read
