@@ -51,6 +51,8 @@ Find your Bluetooth device with `hcitool dev` scan for BLEKey with `hcitool -i <
 
 Start an interactive connection to BLEKey
 
+Last three Wiegand cards are stored in the `0x000b` handle. Currently to cause BLEKey to send out the last read card on the Wiegand lines write to `0x000d`
+
 ```
 [blark@archvm blekey]$ sudo gatttool -t random -b D4:34:E8:CA:6F:6A -I
 [D4:34:E8:CA:6F:6A][LE]> connect
@@ -66,10 +68,12 @@ handle: 0x000e, char properties: 0x08, char value handle: 0x000f, uuid: 0000cccc
 handle: 0x0010, char properties: 0x0a, char value handle: 0x0011, uuid: 0000dddd-0000-1000-8000-00805f9b34fb
 handle: 0x0013, char properties: 0x12, char value handle: 0x0014, uuid: 00002a19-0000-1000-8000-00805f9b34fb
 handle: 0x0017, char properties: 0x02, char value handle: 0x0018, uuid: 00002a29-0000-1000-8000-00805f9b34fb
-
+[D4:34:E8:CA:6F:6A][LE]> char-write-req d 01
+Characteristic value was written successfully
+[D4:34:E8:CA:6F:6A][LE]> char-read-hnd b
+Characteristic value/descriptor: 22 bd 58 60 7c 26 00 24 47 60 85 08 37 00 24 47 60 85 08 37 00 00 
+[D4:34:E8:CA:6F:6A][LE]>
 ```
-
-Last three Wiegand cards are stored in the `0x000b` handle. Currently to cause BLEKey to send out the last read card on the Wiegand lines write to `0x000d`
 
 You can also just use gatttool from the command line to yell BLEKey to send Wiegand data (replace with the address of your device):
 ```
