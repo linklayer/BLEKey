@@ -19,11 +19,14 @@
 #define DATA0_CTL 2
 #define DATA1_CTL 3
 
+// macro to grab bit n from a unit64_t
+#define GETBIT(x,n) ((x >> n)&1ULL)
+
 #define TIMER_DELAY 3000 // Timer is set at 1Mhz, 3000 ticks = 3ms
 #define MAX_LEN 44
 
-uint64_t last_card = 0; 				// unpadded last card for ease of re-transmission
-uint8_t last_size = 0;					// number of bits in last card
+uint64_t last_card = 0xDEADBEEF;		// unpadded last card for ease of re-transmission
+uint8_t last_size = 32;					// number of bits in last card
 volatile uint64_t card_data = 0; 		// incoming wiegand data stored here
 volatile uint8_t bit_count = 0;			// number of bits in the incoming card
 volatile bool data_incoming = false;	// true when data starts coming in
@@ -94,35 +97,50 @@ void add_card(uint64_t *data, uint8_t len)
     memcpy(p_ctx->card_store[0].data, data, (len/8+1));
 }
 
+
+/*
+ * Utility function for starting Wiegand transmission
+ */
+
 void send_wiegand(void)
 {
-	// exposed externally to start wiegand TX from BLE
 	start_tx = true;
 }
 
 
 /*
-void tx_wiegand(uint64_t *data, uint8_t size)
+ * Sends data out on the Wiegand lines
+ */
+
+void tx_wiegand(uint64_t data, uint8_t size)
 {
-	for (uint8_t i=0; i<size; i++) {
-
-	}
-
+	for (uint8_t i = last_size; i-- > 0;)
+		{
+			// wiegand pulses should be ~40us, there should be ~2.025ms
+			// between each pulse...correcting for fubar nrf delay here.
+			uint8_t bit = GETBIT(last_card, i);
+			bit ? nrf_gpio_pin_set(DATA1_CTL) : nrf_gpio_pin_set(DATA0_CTL);
+			nrf_delay_us(26);
+			bit ? nrf_gpio_pin_clear(DATA1_CTL) : nrf_gpio_pin_clear(DATA0_CTL);
+			nrf_delay_us(1380);
+        }
 }
-*/
+
 
 void wiegand_task(void)
 {
     if (start_tx && !timer_started) {
-		uint32_t r;
+		uint32_t ret;
 		uint8_t foo;
-		r = sd_nvic_critical_region_enter(&foo);
-		if (r == NRF_SUCCESS)
+		ret = sd_nvic_critical_region_enter(&foo);
+		if (ret == NRF_SUCCESS)
 		{
-			printf("success - disabled application interrupts\r\n");
+			tx_wiegand(last_card, last_size);
+			printf("Wiegandses pwned!\r\n");
 		}
 		//send wiegand data
 		sd_nvic_critical_region_exit(foo);
+		start_tx = false;
 	}
 
 	if (data_incoming && !timer_started) {
@@ -144,11 +162,9 @@ void wiegand_task(void)
             card_val <<= bit_count;
             card_val |= card_data;
 
-			for (uint8_t i=0; i<bit_count; i++)
-            {
-                // bit shift out each bit of the card
-				uint8_t bit = (last_card >> (bit_count-(i+1))) & 1ULL;
-				printf("%d", bit);
+            for (uint8_t i = last_size; i-- > 0;)
+			{
+				printf("%lld", GETBIT(last_card, i));
             }
 
 			printf( " 0x%llx\r\n", card_val);
