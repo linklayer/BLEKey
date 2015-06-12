@@ -60,3 +60,33 @@ C_SOURCE_PATHS += $(SDK_PATH)Source/app_common
 C_SOURCE_PATHS += $(SDK_PATH)Source/sd_common
 
 include $(SDK_PATH)Source/templates/gcc/Makefile.common
+
+#
+# Stuff for flashing
+#
+
+GDB_PORT_NUMBER := 9992
+
+JLINK_OPTS = -device nrf51822 -if swd -speed 4000
+JLINK_GDB_OPTS = -noir
+JLINK = JLinkExe $(JLINK_OPTS)
+JLINKD_GDB = JLinkGDBServer $(JLINK_GDB_OPTS)
+
+
+flash-jlink: flash.jlink
+	$(JLINK) flash.jlink
+
+flash.jlink:
+	printf "loadbin $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME).bin 0x16000\nr\ng\nexit\n" > flash.jlink
+
+erase-all: erase-all.jlink
+	$(JLINK) erase-all.jlink
+
+erase-all.jlink:
+	# Write to NVMC to enable erase, do erase all, wait for completion. reset
+	printf "w4 4001e504 2\nw4 4001e50c 1\nsleep 100\nr\nexit\n" > erase-all.jlink
+
+run-debug:
+	$(JLINKD_GDB) $(JLINK_OPTS) $(JLINK_GDB_OPTS) -port $(GDB_PORT_NUMBER)
+
+.PHONY:  flash-jlink flash.jlink erase-all erase-all.jlink run-debug
