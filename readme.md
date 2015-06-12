@@ -38,6 +38,8 @@ J-Link>w4 4001e50c 1
 
 If you prefer a GUI you can always use [rknrfgo](http://sourceforge.net/projects/rknrfgo/)
 
+The cheatsheet above is [ripped from Nordic's blog](https://devzone.nordicsemi.com/blogs/22/getting-started-with-nrf51-development-on-mac-os-x/)
+
 ###Windows
 
 Use tools from Nordic. 
