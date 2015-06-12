@@ -126,6 +126,10 @@ void tx_wiegand(uint64_t data, uint8_t size)
         }
 }
 
+/*
+ * Adds the padding (or preamble) bits to card data so it's ready
+ * to be copied with a Proxmark or similar.
+ */
 uint64_t pad_card(uint64_t data, uint8_t size)
 {
     uint8_t pad_len = (MAX_LEN - size);
@@ -192,9 +196,10 @@ void TIMER2_IRQHandler(void)
         data_ready = true;
         NRF_TIMER2->EVENTS_COMPARE[0] = 0;           // Clear compare register 0 event
         NRF_TIMER2->TASKS_STOP = 1;     // Stop the timer
-        NRF_TIMER2->TASKS_CAPTURE[1] = 1;
+        // this code here is probably screwed up, it will get fixed when
+		// I convert the tx_wiegand to timer based code to make it more accurate. 
+		NRF_TIMER2->TASKS_CAPTURE[1] = 1;
         NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY);
-
     }
 }
 
