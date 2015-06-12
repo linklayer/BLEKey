@@ -44,7 +44,22 @@ The cheatsheet above is [ripped from Nordic's blog](https://devzone.nordicsemi.c
 
 Use tools from Nordic. 
 
+Using BLEKey
+------------
+
+Find your Bluetooth device with `hcitool dev` scan for BLEKey with `hcitool -i <dev> lescan`
+
+
+Tell BLEKey to send Wiegand data:
+```
+sudo gatttool -t random -b D4:34:E8:CA:6F:6A --char-write-req -a 0x000d -n 01
+```
+
+
+
 Notes:
 ------
 
 * Bluetooth Explorer is in the [Hardware IO Tools from Apple](http://adcdownload.apple.com/Developer_Tools/Hardware_IO_Tools_for_Xcode_6.3/HardwareIOTools_Xcode_6.3.dmg) it's probably the best BLE utility for Mac.
+
+
