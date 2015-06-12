@@ -25,15 +25,15 @@
 #define TIMER_DELAY 3000 // Timer is set at 1Mhz, 3000 ticks = 3ms
 #define MAX_LEN 44
 
-uint64_t last_card = 0xDEADBEEF;		// unpadded last card for ease of re-transmission
-uint8_t last_size = 32;					// number of bits in last card
-volatile uint64_t card_data = 0; 		// incoming wiegand data stored here
-volatile uint8_t bit_count = 0;			// number of bits in the incoming card
-volatile bool data_incoming = false;	// true when data starts coming in
-volatile bool data_ready = false;		// set when timer interrupt fires
-volatile bool timer_started = false;	// if recv wiegand
+uint64_t last_card = 0xDEADBEEF;        // unpadded last card for ease of re-transmission
+uint8_t last_size = 32;                 // number of bits in last card
+volatile uint64_t card_data = 0;        // incoming wiegand data stored here
+volatile uint8_t bit_count = 0;         // number of bits in the incoming card
+volatile bool data_incoming = false;    // true when data starts coming in
+volatile bool data_ready = false;       // set when timer interrupt fires
+volatile bool timer_started = false;    // if recv wiegand
 volatile bool card_fubar = false;       // set if BLE screws up an incoming card
-volatile bool start_tx = false;			// triggers sending of wiegand data
+volatile bool start_tx = false;         // triggers sending of wiegand data
 
 static struct wiegand_ctx *p_ctx;
 
@@ -104,7 +104,7 @@ void add_card(uint64_t *data, uint8_t len)
 
 void send_wiegand(void)
 {
-	start_tx = true;
+    start_tx = true;
 }
 
 
@@ -114,15 +114,15 @@ void send_wiegand(void)
 
 void tx_wiegand(uint64_t data, uint8_t size)
 {
-	for (uint8_t i = last_size; i-- > 0;)
-		{
-			// wiegand pulses should be ~40us, there should be ~2.025ms
-			// between each pulse...correcting for fubar nrf delay here.
-			uint8_t bit = GETBIT(last_card, i);
-			bit ? nrf_gpio_pin_set(DATA1_CTL) : nrf_gpio_pin_set(DATA0_CTL);
-			nrf_delay_us(26);
-			bit ? nrf_gpio_pin_clear(DATA1_CTL) : nrf_gpio_pin_clear(DATA0_CTL);
-			nrf_delay_us(1380);
+    for (uint8_t i = last_size; i-- > 0;)
+        {
+            // wiegand pulses should be ~40us, there should be ~2.025ms
+            // between each pulse...correcting for fubar nrf delay here.
+            uint8_t bit = GETBIT(last_card, i);
+            bit ? nrf_gpio_pin_set(DATA1_CTL) : nrf_gpio_pin_set(DATA0_CTL);
+            nrf_delay_us(26);
+            bit ? nrf_gpio_pin_clear(DATA1_CTL) : nrf_gpio_pin_clear(DATA0_CTL);
+            nrf_delay_us(1380);
         }
 }
 
@@ -130,20 +130,20 @@ void tx_wiegand(uint64_t data, uint8_t size)
 void wiegand_task(void)
 {
     if (start_tx && !timer_started) {
-		uint32_t ret;
-		uint8_t foo;
-		ret = sd_nvic_critical_region_enter(&foo);
-		if (ret == NRF_SUCCESS)
-		{
-			tx_wiegand(last_card, last_size);
-			printf("Wiegandses pwned!\r\n");
-		}
-		//send wiegand data
-		sd_nvic_critical_region_exit(foo);
-		start_tx = false;
-	}
+        uint32_t ret;
+        uint8_t foo;
+        ret = sd_nvic_critical_region_enter(&foo);
+        if (ret == NRF_SUCCESS)
+        {
+            tx_wiegand(last_card, last_size);
+            printf("Wiegandses pwned!\r\n");
+        }
+        //send wiegand data
+        sd_nvic_critical_region_exit(foo);
+        start_tx = false;
+    }
 
-	if (data_incoming && !timer_started) {
+    if (data_incoming && !timer_started) {
         NRF_TIMER2->TASKS_START = 1;    // Start TIMER2
         timer_started = true;
     }
@@ -152,28 +152,28 @@ void wiegand_task(void)
         if (bit_count > 1 && !card_fubar)   // avoid garbage data at startup.
         {
             uint8_t pad_len = (MAX_LEN - bit_count);
-			last_card = card_data;
-			last_size = bit_count;
+            last_card = card_data;
+            last_size = bit_count;
 
-			printf("Read %d bits: ", bit_count);
+            printf("Read %d bits: ", bit_count);
 
-			// add the the pad bits to the read card
+            // add the the pad bits to the read card
             uint64_t card_val = padding[pad_len];
             card_val <<= bit_count;
             card_val |= card_data;
 
             for (uint8_t i = last_size; i-- > 0;)
-			{
-				printf("%lld", GETBIT(last_card, i));
+            {
+                printf("%lld", GETBIT(last_card, i));
             }
 
-			printf( " 0x%llx\r\n", card_val);
-	    // add card to struct for BLE transmission
-	    add_card(&card_val, bit_count);
+            printf( " 0x%llx\r\n", card_val);
+        // add card to struct for BLE transmission
+        add_card(&card_val, bit_count);
         }
 
         //reset vars for next read
-		data_incoming = false;
+        data_incoming = false;
         timer_started = false;
         data_ready = false;
         card_fubar = false;
