@@ -67,13 +67,14 @@ include $(SDK_PATH)Source/templates/gcc/Makefile.common
 
 GDB_PORT_NUMBER := 9992
 
+JLINK_PATH = /home/blark/Downloads/JLink_Linux_V500c_x86_64
 JLINK_OPTS = -device nrf51822 -if swd -speed 4000
 JLINK_GDB_OPTS = -noir
-JLINK = JLinkExe $(JLINK_OPTS)
+JLINK = $(JLINK_PATH)/JLinkExe $(JLINK_OPTS)
 JLINKD_GDB = JLinkGDBServer $(JLINK_GDB_OPTS)
 
 
-flash-jlink: flash.jlink
+flash: flash.jlink
 	$(JLINK) flash.jlink
 
 flash.jlink:
