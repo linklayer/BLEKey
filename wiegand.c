@@ -132,9 +132,9 @@ void tx_wiegand(uint64_t data, uint8_t size)
  */
 uint64_t pad_card(uint64_t data, uint8_t size)
 {
-    uint8_t pad_len = (MAX_LEN - size);
+	uint8_t pad_len = (MAX_LEN - size);
     uint64_t card_val = padding[pad_len];
-    card_val <<= size;
+	card_val <<= size;
     card_val |= data;
     return card_val;
 }
@@ -150,7 +150,7 @@ void wiegand_task(void)
         {
             // send the data on the Wiegands
             tx_wiegand(last_card, last_size);
-            printf("Sent %d bits: 0x%llx, Wiegandses pwned!\r\n", last_size, pad_card(last_card, last_size));
+            printf("Tx %d bits: 0x%llx, Wiegandses pwned!\r\n", last_size, pad_card(last_card, last_size));
         }
         sd_nvic_critical_region_exit(foo);
         start_tx = false;
@@ -168,13 +168,13 @@ void wiegand_task(void)
             last_card = card_data;
             last_size = bit_count;
             // print debug information to the serial terminal
-            printf("Read %d bits: ", bit_count);
+            printf("Rx %d bits: ", bit_count);
             for (uint8_t i = last_size; i-- > 0;)
             {
                 printf("%lld", GETBIT(last_card, i));
             }
             uint64_t full_card = pad_card(card_data, bit_count);
-            printf( " 0x%llx\r\n", full_card);
+            printf( " Raw: 0x%llx Padded: 0x%llx\r\n", card_data, full_card);
             // add card to struct for BLE transmission
             add_card(&full_card, bit_count);
         }
@@ -212,7 +212,7 @@ void GPIOTE_IRQHandler(void)
     if (!(port_status >> DATA1_IN & 1UL)) {
         card_data |= 1;
     } else if (!(port_status >> DATA0_IN & 1UL)) {
-        // 0 is already assigned, don't need to do anything
+		// 0 is already assigned, don't need to do anything
     } else {
         // port status lost thanks to BLE delaying read.
         card_fubar = true;
