@@ -26,6 +26,7 @@
 #define MAX_LEN 44
 
 uint64_t last_card = 0xDEADBEEF;        // unpadded last card for ease of re-transmission
+uint64_t proxmark_fmt = 0;				// proxmark formatted card 
 uint8_t last_size = 32;                 // number of bits in last card
 volatile uint64_t card_data = 0;        // incoming wiegand data stored here
 volatile uint8_t bit_count = 0;         // number of bits in the incoming card
@@ -87,14 +88,18 @@ void wiegand_init(struct wiegand_ctx *ctx)
     printf("done\r\n");
 }
 
-void add_card(uint64_t *data, uint8_t len) 
+void add_card(uint64_t *data, uint8_t len)
 {
-    // shift cards over
-    memcpy(&(p_ctx->card_store[1]), p_ctx->card_store,
-           sizeof(p_ctx->card_store) - sizeof(struct card));
-    // add card to store
+	// shift cards over
+    //memcpy(&(p_ctx->card_store[1]), p_ctx->card_store, 16);
+    //       sizeof(p_ctx->card_store) - sizeof(struct card));
+    p_ctx->card_store[2] = p_ctx->card_store[1];
+    p_ctx->card_store[1] = p_ctx->card_store[0];
+	// add card to store
     p_ctx->card_store[0].bit_len = len;
-    memcpy(p_ctx->card_store[0].data, data, (len/8+1));
+	// zero out old data to avoid garbage data from longer cards
+	memset(p_ctx->card_store[0].data, 0, 6);
+	memcpy(p_ctx->card_store[0].data, data, 6); //(len/8+1));
 }
 
 
@@ -173,10 +178,10 @@ void wiegand_task(void)
             {
                 printf("%lld", GETBIT(last_card, i));
             }
-            uint64_t full_card = pad_card(card_data, bit_count);
-            printf( " Raw: 0x%llx Padded: 0x%llx\r\n", card_data, full_card);
+            proxmark_fmt = pad_card(card_data, bit_count);
+            printf( " Raw: 0x%llx Padded: 0x%llx\r\n", card_data, proxmark_fmt);
             // add card to struct for BLE transmission
-            add_card(&full_card, bit_count);
+            add_card(&proxmark_fmt, bit_count);
         }
 
         //reset vars for next read
@@ -186,6 +191,7 @@ void wiegand_task(void)
         card_fubar = false;
         bit_count = 0;
         card_data = 0;
+		proxmark_fmt = 0;
     }
 }
 
