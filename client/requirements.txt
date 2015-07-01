@@ -1,0 +1,4 @@
+# Install requirements with:
+# $ pip install -r requirements.txt
+#
+pygatt>=1.0.1
