@@ -4,15 +4,48 @@ BLEKey
 Pinout
 ------
 
-Harware rev. 1 code name Acamas 
+###Harware rev. 1 code name Acamas
 
 | Pin	| Function 		|
 | ------|---------------|
 | 0     | Data 0 in 	|
 | 1		| Data 1 in		|
+| 2     | Data 0 ctl	|
+| 3		| Data 1 ctl	|
 | ...	|				|
 | 9		| Serial		|
 | 11	| Serial		|
+| 28	| GPIO			|
+| 29	| GPIO			|
+
+###Hardware rev. 2 Agapenor
+
+| Pin	| Function 		|
+| ------|---------------|
+| 0     | Data 0 in 	|
+| 7		| Data 1 in		|
+| 		| GPIO			|
+
+
+###Programming P1 (square solder mask pin 0)
+
+
+| Pin	| Function 		|
+| ------|---------------|
+| 0     | Vcc		 	|
+| 1		| DIO			|
+| 2		| CLK			|
+| 3     | Gnd			|
+
+###Serial/GPIO P2 (square solder mask pin 0)
+
+| Pin	| Function 		|
+| ------|---------------|
+| 0     | GPIO		 	|
+| 1		| GPIO/serial	|
+| 2		| GPIO/serial	|
+| 3     | Gnd			|
+
 
 Flashing
 --------
