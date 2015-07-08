@@ -15,7 +15,7 @@
 
 // wiegand data pins
 #define DATA0_IN 0
-#define DATA1_IN 1
+#define DATA1_IN 7
 #define DATA0_CTL 2
 #define DATA1_CTL 3
 
@@ -26,8 +26,8 @@
 #define MAX_LEN 44
 
 uint64_t last_card = 0xDEADBEEF;        // unpadded last card for ease of re-transmission
-uint64_t proxmark_fmt = 0;				// proxmark formatted card 
 uint8_t last_size = 32;                 // number of bits in last card
+uint64_t proxmark_fmt = 0;				// proxmark formatted card
 volatile uint64_t card_data = 0;        // incoming wiegand data stored here
 volatile uint8_t bit_count = 0;         // number of bits in the incoming card
 volatile bool data_incoming = false;    // true when data starts coming in
