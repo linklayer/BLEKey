@@ -4,12 +4,14 @@ import pygatt
 import pprint as pp
 import os
 
+# Set default MAC so you can just "connect" without any parameters
 DEFAULT_MAC = "D4:34:E8:CA:6F:6A"
+# gatttool seems to take a long time getting data from the nrf51
 DEFAULT_TIMEOUT = 15
 
 
 class BLEKeyClient(cmd.Cmd):
-    """Derp de derp"""
+    """Command processor for the BLEKey"""
 
     def __init__(self):
         cmd.Cmd.__init__(self)
