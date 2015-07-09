@@ -1,51 +1,6 @@
 BLEKey
 ======
 
-Pinout
-------
-
-###Harware rev. 1 code name Acamas
-
-| Pin	| Function 		|
-| ------|---------------|
-| 0     | Data 0 in 	|
-| 1		| Data 1 in		|
-| 2     | Data 0 ctl	|
-| 3		| Data 1 ctl	|
-| ...	|				|
-| 9		| Serial		|
-| 11	| Serial		|
-| 28	| GPIO			|
-| 29	| GPIO			|
-
-###Hardware rev. 2 Agapenor
-
-| Pin	| Function 		|
-| ------|---------------|
-| 0     | Data 0 in 	|
-| 7		| Data 1 in		|
-| 		| GPIO			|
-
-
-###Programming P1 (square solder mask pin 0)
-
-
-| Pin	| Function 		|
-| ------|---------------|
-| 0     | Vcc		 	|
-| 1		| DIO			|
-| 2		| CLK			|
-| 3     | Gnd			|
-
-###Serial/GPIO P2 (square solder mask pin 0)
-
-| Pin	| Function 		|
-| ------|---------------|
-| 0     | GPIO		 	|
-| 1		| GPIO/serial	|
-| 2		| GPIO/serial	|
-| 3     | Gnd			|
-
 
 Flashing
 --------
@@ -80,6 +35,18 @@ Use tools from Nordic.
 Using BLEKey
 ------------
 
+###TODO ADD CHARACTERISTIC INFO HERE.
+
+###Client
+
+There is a BLEKey client in the client/ directory of the git repo. See readme.md and requirements.txt for more information on its use.
+
+###Phones/Tablets
+
+A client is planned. Until then download any BLE utility that can read/write BLE characteristics. See below for more information on specific characteristics.
+
+###CLI (Linux)
+
 Find your Bluetooth device with `hcitool dev` scan for BLEKey with `hcitool -i <dev> lescan`
 
 Start an interactive connection to BLEKey
@@ -113,11 +80,55 @@ You can also just use gatttool from the command line to yell BLEKey to send Wieg
 sudo gatttool -t random -b D4:34:E8:CA:6F:6A --char-write-req -a 0x000d -n 01
 ```
 
-
-
-Notes:
-------
+###Notes:
 
 * Bluetooth Explorer is in the [Hardware IO Tools from Apple](http://adcdownload.apple.com/Developer_Tools/Hardware_IO_Tools_for_Xcode_6.3/HardwareIOTools_Xcode_6.3.dmg) it's probably the best BLE utility for Mac.
 
+Pinouts
+-------
 
+###Harware rev. 1 code name Acamas
+
+| Pin	| Function 		|
+| ------|---------------|
+| 0     | Data 0 in 	|
+| 1		| Data 1 in		|
+| 2     | Data 0 ctl	|
+| 3		| Data 1 ctl	|
+| 9		| Serial		|
+| 11	| Serial		|
+| 26	| Xtal 1		|
+| 27	| Xtal 2		|
+| 28	| GPIO			|
+| 29	| GPIO			|
+| 35	| DIO			|
+| 36	| CLK			|
+
+###Hardware rev. 2 Agapenor
+
+Pinouts are identical to Acamas unless otherwise noted.
+
+| Pin	| Function 		|
+| ------|---------------|
+| 0     | Data 0 in 	|
+| 7		| Data 1 in		|
+| 8		| GPIO			|
+| 20	| LED0			|
+
+####P1 - Programming port (square solder mask pin 0)
+
+| Pin	| Function 		|
+| ------|---------------|
+| 0     | Vcc		 	|
+| 1		| DIO			|
+| 2		| CLK			|
+| 3     | Gnd			|
+
+####P2 - Serial/GPIO port (square solder mask pin 0)
+
+| Pin	| Function 		|
+| ------|---------------|
+| 0     | GPIO		 	|
+| 1		| GPIO/serial	|
+| 2		| GPIO/serial	|
+| 3     | Gnd			|
