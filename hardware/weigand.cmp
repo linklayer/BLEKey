@@ -1,0 +1,122 @@
+Cmp-Mod V01 Created by Cvpcb (2014-10-22 BZR 5216)-product   date = Thu 04 Jun 2015 01:41:08 PM EDT
+
+BeginCmp
+TimeStamp = /547DCF11;
+Reference = BATT1;
+ValeurCmp = CR2032;
+IdModule  = new_wieg:BU1632SM-JJ-GTR;
+EndCmp
+
+BeginCmp
+TimeStamp = /5489A399;
+Reference = C1;
+ValeurCmp = 100nF;
+IdModule  = Capacitors_SMD:C_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /54899DF3;
+Reference = C2;
+ValeurCmp = 12pF;
+IdModule  = Capacitors_SMD:C_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /54899E00;
+Reference = C3;
+ValeurCmp = 12pF;
+IdModule  = Capacitors_SMD:C_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /547DCE55;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = Resistors_SMD:R_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /547F5E27;
+Reference = K1;
+ValeurCmp = WIEGAND;
+IdModule  = new_wieg:IDC3POS;
+EndCmp
+
+BeginCmp
+TimeStamp = /55707409;
+Reference = P1;
+ValeurCmp = CONN_01X04;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
+EndCmp
+
+BeginCmp
+TimeStamp = /5570B08F;
+Reference = P2;
+ValeurCmp = CONN_01X04;
+IdModule  = Pin_Headers:Pin_Header_Straight_1x04;
+EndCmp
+
+BeginCmp
+TimeStamp = /5479C83C;
+Reference = Q1;
+ValeurCmp = FET_N;
+IdModule  = new_wieg:SOT-23-FET;
+EndCmp
+
+BeginCmp
+TimeStamp = /547DCD65;
+Reference = Q2;
+ValeurCmp = FET_N;
+IdModule  = new_wieg:SOT-23-FET;
+EndCmp
+
+BeginCmp
+TimeStamp = /547DCE7A;
+Reference = R1;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /547A0C9D;
+Reference = R2;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /547A0CBB;
+Reference = R3;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /547DCD6D;
+Reference = R4;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /547DCD73;
+Reference = R5;
+ValeurCmp = R;
+IdModule  = Resistors_SMD:R_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /547F5765;
+Reference = U1;
+ValeurCmp = MDBT40;
+IdModule  = new_wieg:MDBT40;
+EndCmp
+
+BeginCmp
+TimeStamp = /54899CE7;
+Reference = X1;
+ValeurCmp = 32.768kHz;
+IdModule  = Capacitors_SMD:C_1206_HandSoldering;
+EndCmp
+
+EndListe

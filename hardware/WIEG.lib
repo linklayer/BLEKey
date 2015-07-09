@@ -1,0 +1,19 @@
+EESchema-LIBRARY Version 2.3  Date: 1/2/2015 11:11:27 AM
+#encoding utf-8
+#
+# CONN_3
+#
+DEF CONN_3 K 0 40 Y N 1 F N
+F0 "K" -50 0 50 V V C CNN
+F1 "CONN_3" 50 0 40 V V C CNN
+F2 "~" 0 0 60 H V C CNN
+F3 "~" 0 0 60 H V C CNN
+DRAW
+S -100 150 100 -150 0 1 0 N
+X P1 1 -350 100 250 R 60 60 1 1 P I
+X PM 2 -350 0 250 R 60 60 1 1 P I
+X P3 3 -350 -100 250 R 60 60 1 1 P I
+ENDDRAW
+ENDDEF
+#
+#End Library
