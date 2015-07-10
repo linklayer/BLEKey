@@ -88,7 +88,7 @@
 #define SEC_PARAM_MAX_KEY_SIZE               16                                         /**< Maximum encryption key size. */
 
 #define DEAD_BEEF                            0xDEADBEEF                                 /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
-
+#define VBAT_MAX_IN_MV						 3000
 
 static uint16_t                              m_conn_handle = BLE_CONN_HANDLE_INVALID;   /**< Handle of the current connection. */
 static ble_gap_adv_params_t                  m_adv_params;                              /**< Parameters to be passed to the stack when starting advertising. */
@@ -172,6 +172,19 @@ void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
 }
 
 
+//ADC initialization
+static void adc_init(void)
+{
+	// Configure ADC
+    NRF_ADC->CONFIG     = (ADC_CONFIG_RES_8bit                        << ADC_CONFIG_RES_Pos)     |
+                          (ADC_CONFIG_INPSEL_SupplyOneThirdPrescaling << ADC_CONFIG_INPSEL_Pos)  |
+                          (ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos)  |
+                          (ADC_CONFIG_PSEL_Disabled                   << ADC_CONFIG_PSEL_Pos)    |
+                          (ADC_CONFIG_EXTREFSEL_None                  << ADC_CONFIG_EXTREFSEL_Pos);
+    NRF_ADC->EVENTS_END = 0;
+    NRF_ADC->ENABLE     = ADC_ENABLE_ENABLE_Enabled;
+}
+
 /**@brief Function for performing battery measurement and updating the Battery Level characteristic
  *        in Battery Service.
  */
@@ -180,7 +193,21 @@ static void battery_level_update(void)
     uint32_t err_code;
     uint8_t  battery_level;
 
-    battery_level = 0x55;
+	NRF_ADC->EVENTS_END  = 0;    // Stop any running conversions.
+    NRF_ADC->TASKS_START = 1;
+
+    while (!NRF_ADC->EVENTS_END)
+    {
+    }
+
+    uint16_t vbg_in_mv = 1200;
+    uint8_t adc_max = 255;
+    uint16_t vbat_current_in_mv = (NRF_ADC->RESULT * 3 * vbg_in_mv) / adc_max;
+
+    NRF_ADC->EVENTS_END     = 0;
+    NRF_ADC->TASKS_STOP     = 1;
+
+    battery_level = ((vbat_current_in_mv * 100) / VBAT_MAX_IN_MV);
 
     err_code = ble_bas_battery_level_update(&m_bas, battery_level);
     if ((err_code != NRF_SUCCESS) &&
@@ -775,7 +802,7 @@ int main(void)
     // Start execution.
     application_timers_start();
     advertising_start();
-
+	adc_init();
 
     //uint8_t i;
 
