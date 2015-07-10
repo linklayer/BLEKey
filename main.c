@@ -54,7 +54,7 @@
 #define ADVERTISING_LED_PIN_NO               20                                         /**< Is on when device is advertising. */
 
 #define DEVICE_NAME                          "BLEKey"                                   /**< Name of device. Will be included in the advertising data. */
-#define MANUFACTURER_NAME                    "Nobody"                                   /**< Manufacturer. Will be passed to Device Information Service. */
+#define MANUFACTURER_NAME                    "MB_EE"                                   /**< Manufacturer. Will be passed to Device Information Service. */
 #define APP_ADV_INTERVAL                     0x0C80                                    /**< The advertising interval (in units of 0.625 ms. This value corresponds to 25 ms). */
 #define APP_ADV_TIMEOUT_IN_SECONDS           0                                        /**< The advertising timeout in units of seconds. */
 
@@ -63,12 +63,6 @@
 #define APP_TIMER_OP_QUEUE_SIZE              4                                          /**< Size of timer operation queues. */
 
 #define BATTERY_LEVEL_MEAS_INTERVAL          APP_TIMER_TICKS(2000, APP_TIMER_PRESCALER) /**< Battery level measurement interval (ticks). */
-#define MIN_BATTERY_LEVEL                    81                                         /**< Minimum simulated battery level. */
-#define MAX_BATTERY_LEVEL                    100                                        /**< Maximum simulated battery level. */
-#define BATTERY_LEVEL_INCREMENT              1                                          /**< Increment between each simulated battery level measurement. */
-
-
-#define SENSOR_CONTACT_DETECTED_INTERVAL     APP_TIMER_TICKS(5000, APP_TIMER_PRESCALER) /**< Sensor Contact Detected toggle interval (ticks). */
 
 #define MIN_CONN_INTERVAL                    MSEC_TO_UNITS(500, UNIT_1_25_MS)           /**< Minimum acceptable connection interval (0.5 seconds). */
 #define MAX_CONN_INTERVAL                    MSEC_TO_UNITS(1000, UNIT_1_25_MS)          /**< Maximum acceptable connection interval (1 second). */

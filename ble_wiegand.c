@@ -55,7 +55,7 @@ static void on_disconnect(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
  */
 static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
 {
-    static uint8_t read_cnt = 0;
+    //static uint8_t read_cnt = 0;
     ble_gatts_evt_write_t * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
 
     if (p_evt_write->handle == p_wiegand->last_cards_handles.cccd_handle)
@@ -65,7 +65,8 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
     if (p_evt_write->handle == p_wiegand->replay_handles.value_handle)
     {
 	send_wiegand();
-        if (read_cnt % 2) {
+    /*
+		if (read_cnt % 2) {
             nrf_gpio_pin_clear(8);
             nrf_gpio_pin_clear(9);
             nrf_gpio_pin_clear(10);
@@ -77,7 +78,8 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
             nrf_gpio_pin_set(11);
         }
         read_cnt++;
-        return;
+    */
+		return;
     }
     if (p_evt_write->handle == p_wiegand->send_data_handles.value_handle)
     {
