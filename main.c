@@ -83,6 +83,7 @@
 
 #define DEAD_BEEF                            0xDEADBEEF                                 /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 #define VBAT_MAX_IN_MV						 3000
+#define STATIC_PASSKEY						 "123456"
 
 static uint16_t                              m_conn_handle = BLE_CONN_HANDLE_INVALID;   /**< Handle of the current connection. */
 static ble_gap_adv_params_t                  m_adv_params;                              /**< Parameters to be passed to the stack when starting advertising. */
@@ -334,6 +335,13 @@ static void gap_params_init(void)
 
     err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
     APP_ERROR_CHECK(err_code);
+
+	//passkey setup
+	uint8_t passkey[] = STATIC_PASSKEY;
+	ble_opt_t ble_opt;
+	ble_opt.gap.passkey.p_passkey = &passkey[0];
+	err_code =  sd_ble_opt_set(BLE_GAP_OPT_PASSKEY, &ble_opt);
+	APP_ERROR_CHECK(err_code);
 }
 
 
