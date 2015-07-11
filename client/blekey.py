@@ -5,7 +5,7 @@ import pprint as pp
 import os
 
 # Set default MAC so you can just "connect" without any parameters
-DEFAULT_MAC = "D4:34:E8:CA:6F:6A"
+DEFAULT_MAC = "DE:AB:92:17:E6:41"
 # gatttool seems to take a long time getting data from the nrf51
 DEFAULT_TIMEOUT = 15
 
@@ -37,6 +37,7 @@ class BLEKeyClient(cmd.Cmd):
         print("connecting to %s" % mac)
         self.bk = pygatt.BluetoothLEDevice(mac, app_options="-t random")
         self.bk.connect(timeout=DEFAULT_TIMEOUT)
+        self.do_bat(None)
         self.prompt = "\033[1;34m[%s]\033[1;m blekey>" % mac
 
     def complete_connect(self, text, line, begidx, endidx):
@@ -76,6 +77,14 @@ class BLEKeyClient(cmd.Cmd):
     def help_readcards(self):
         print("readcards reads the last three cards")
 
+    def do_bat(self, _):
+        battery = self.bk.char_read_hnd(0x14, timeout=DEFAULT_TIMEOUT)
+        print("Battery at %d%%" % battery[0])
+
+    def help_bat(self):
+        print("Usage: bat")
+        print("Gives you the BLEKey's remaining battery in percent")
+
     def do_disconnect(self, _):
         try:
             self.bk.disconnect()
@@ -104,4 +113,8 @@ class BLEKeyClient(cmd.Cmd):
 if __name__ == '__main__':
     if os.getuid() is not 0:
         print("Warning BLE tools need to be run as root! UID 0 not detected")
+    else:
+        print("\r\nType quit, exit or ^D to cleanly exit and "
+              "disonnect from BLEKey or you're gonna have a bad time... ")
+        print("? or help gets you a list of commands. Tab completion FTW.\r\n")
     BLEKeyClient().cmdloop()
