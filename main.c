@@ -21,6 +21,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 #include "nordic_common.h"
 #include "nrf.h"
 #include "app_error.h"
@@ -100,6 +101,8 @@ static bool                                  m_memory_access_in_progress = false
 #ifdef BLE_DFU_APP_SUPPORT
 static ble_dfu_t                             m_dfus;                                    /**< Structure used to identify the DFU service. */
 #endif // BLE_DFU_APP_SUPPORT
+
+static uint8_t passkey[] = STATIC_PASSKEY;
 
 #if 0
 /**@brief Function for error handling, which is called when an error has occurred.
@@ -337,7 +340,6 @@ static void gap_params_init(void)
     APP_ERROR_CHECK(err_code);
 
 	//passkey setup
-	uint8_t passkey[] = STATIC_PASSKEY;
 	ble_opt_t ble_opt;
 	ble_opt.gap.passkey.p_passkey = &passkey[0];
 	err_code =  sd_ble_opt_set(BLE_GAP_OPT_PASSKEY, &ble_opt);
@@ -788,13 +790,13 @@ static void power_manage(void)
 int main(void)
 {
     // initialze wiegand context data struct
-    struct wiegand_ctx wiegand_ctx;
+    Wiegand_ctx *wiegand_ctx = malloc(sizeof(Wiegand_ctx));
 
     // Initialize.
     leds_init();
     timers_init();
     ble_stack_init();
-    wiegand_init(&wiegand_ctx);
+    wiegand_init(wiegand_ctx);
     device_manager_init();
     gap_params_init();
     advertising_init();
@@ -806,15 +808,12 @@ int main(void)
     advertising_start();
 	adc_init();
 
-    //uint8_t i;
-
-    //uint32_t err_code;
     // Enter main loop.
     uint8_t buf[22];
     for (;;)
     {
         wiegand_task();
-        memcpy(buf, wiegand_ctx.card_store, 22);
+        memcpy(buf, wiegand_ctx->card_store, 22);
         ble_wiegand_last_cards_set(&m_wiegand, buf, 22);
         power_manage();
     }

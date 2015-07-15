@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "nrf.h" // added
 //#include "nrf51.h"
@@ -28,6 +29,7 @@
 uint64_t last_card = 0xDEADBEEF;        // unpadded last card for ease of re-transmission
 uint8_t last_size = 32;                 // number of bits in last card
 uint64_t proxmark_fmt = 0;				// proxmark formatted card
+uint32_t num_reads = 0;					// number of cards read by BLEKey
 volatile uint64_t card_data = 0;        // incoming wiegand data stored here
 volatile uint8_t bit_count = 0;         // number of bits in the incoming card
 volatile bool data_incoming = false;    // true when data starts coming in
@@ -36,7 +38,7 @@ volatile bool timer_started = false;    // if recv wiegand
 volatile bool card_fubar = false;       // set if BLE screws up an incoming card
 volatile bool start_tx = false;         // triggers sending of wiegand data
 
-static struct wiegand_ctx *p_ctx;
+static Wiegand_ctx *p_ctx;				// Struct to store card data
 
 // static value that needs to be prepended to HID Prox cards
 static const uint16_t padding[19] =
@@ -45,11 +47,11 @@ static const uint16_t padding[19] =
     0x41, 0x81, 0x101, 0x201, 0x401, 0x801
 };
 
-void wiegand_init(struct wiegand_ctx *ctx)
+void wiegand_init(Wiegand_ctx *ctx)
 {
-    p_ctx = ctx;
+	p_ctx = ctx;
 
-    retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
+	retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
     printf("Initializing wiegand shit...");
 
     // Set the Wiegand control lines as outputs and pull them low
@@ -90,16 +92,11 @@ void wiegand_init(struct wiegand_ctx *ctx)
 
 void add_card(uint64_t *data, uint8_t len)
 {
-	// shift cards over
-    //memcpy(&(p_ctx->card_store[1]), p_ctx->card_store, 16);
-    //       sizeof(p_ctx->card_store) - sizeof(struct card));
-    p_ctx->card_store[2] = p_ctx->card_store[1];
-    p_ctx->card_store[1] = p_ctx->card_store[0];
 	// add card to store
-    p_ctx->card_store[0].bit_len = len;
+    p_ctx->card_store[num_reads].bit_len = len;
 	// zero out old data to avoid garbage data from longer cards
-	memset(p_ctx->card_store[0].data, 0, 6);
-	memcpy(p_ctx->card_store[0].data, data, 6); //(len/8+1));
+	memset(p_ctx->card_store[num_reads].data, 0, CARD_DATA_LEN);
+	memcpy(p_ctx->card_store[num_reads].data, data, CARD_DATA_LEN);
 }
 
 
@@ -173,7 +170,7 @@ void wiegand_task(void)
             last_card = card_data;
             last_size = bit_count;
             // print debug information to the serial terminal
-            printf("Rx %d bits: ", bit_count);
+            printf("%ld. Rx %d bits: ", num_reads, bit_count);
             for (uint8_t i = last_size; i-- > 0;)
             {
                 printf("%lld", GETBIT(last_card, i));
@@ -182,7 +179,8 @@ void wiegand_task(void)
             printf( " Raw: 0x%llx Padded: 0x%llx\r\n", card_data, proxmark_fmt);
             // add card to struct for BLE transmission
             add_card(&proxmark_fmt, bit_count);
-        }
+        	num_reads++;
+		}
 
         //reset vars for next read
         data_incoming = false;

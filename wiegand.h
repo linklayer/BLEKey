@@ -1,20 +1,22 @@
 #ifndef WIEGAND_H_
 #define WIEGAND_H_
 
-#define WIEGAND_MAX_CARD_LEN 44
-#define WIEGAND_MAX_CARDS 3
+#define CARD_DATA_LEN 6
+#define WIEGAND_MAX_CARDS 10
 
-struct card {
+typedef struct Card Card;
+struct Card {
     uint8_t bit_len;
-    uint8_t data[(WIEGAND_MAX_CARD_LEN/8)+1];
+    uint8_t data[CARD_DATA_LEN];
 };
 
-struct wiegand_ctx {
-    struct card card_store[WIEGAND_MAX_CARDS];
+typedef struct Wiegand_ctx Wiegand_ctx;
+struct Wiegand_ctx {
+    Card card_store[WIEGAND_MAX_CARDS];
     uint8_t card_count;
 };
 
-void wiegand_init(struct wiegand_ctx *ctx);
+void wiegand_init(Wiegand_ctx *ctx);
 void wiegand_task(void);
 void add_card(uint64_t *data, uint8_t len);
 void send_wiegand(void);
