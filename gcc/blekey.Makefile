@@ -29,21 +29,18 @@ SDK_PATH = ../nordic/nrf51822/
 OUTPUT_FILENAME := blekey
 
 DEVICE_VARIANT := xxaa
-#DEVICE_VARIANT := xxab
 
 USE_SOFTDEVICE := S110
-#USE_SOFTDEVICE := S210
 
 CFLAGS := -DDEBUG_NRF_USER -DBLE_STACK_SUPPORT_REQD -DS110
 
-# we do not use heap in this app
-ASMFLAGS := -D__HEAP_SIZE=0
+ASMFLAGS := -D__HEAP_SIZE=2048
 
 # keep every function in separate section. This will allow linker to dump unused functions
-CFLAGS += -ffunction-sections -g
+CFLAGS += -ffunction-sections -g -fdata-sections -O2
 
 # let linker to dump unused sections
-#LDFLAGS := -Wl,--gc-sections
+LDFLAGS := -Wl,--gc-sections
 
 INCLUDEPATHS += -I"$(SDK_PATH)Include/s110"
 INCLUDEPATHS += -I"$(SDK_PATH)Include/ble"
