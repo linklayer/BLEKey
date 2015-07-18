@@ -2,7 +2,7 @@
 #define WIEGAND_H_
 
 #define CARD_DATA_LEN 6
-#define WIEGAND_MAX_CARDS 10
+#define WIEGAND_MAX_CARDS 146
 
 typedef struct Card Card;
 struct Card {

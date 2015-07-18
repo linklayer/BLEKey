@@ -1,0 +1,4 @@
+loadbin _build/blekey_s110_xxaa.bin 0x16000
+r
+g
+exit

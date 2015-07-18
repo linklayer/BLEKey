@@ -8,7 +8,8 @@ import os
 DEFAULT_MAC = "DE:AB:92:17:E6:41"
 # gatttool seems to take a long time getting data from the nrf51
 DEFAULT_TIMEOUT = 15
-BLE_DEVICE = "hci1"
+BLE_DEVICE = "hci0"
+
 
 class BLEKeyClient(cmd.Cmd):
     """Command processor for the BLEKey"""
@@ -35,7 +36,8 @@ class BLEKeyClient(cmd.Cmd):
         if not mac:
             mac = DEFAULT_MAC
         print("connecting to %s" % mac)
-        self.bk = pygatt.BluetoothLEDevice(mac, hci_device=BLE_DEVICE, app_options="-t random")
+        self.bk = pygatt.BluetoothLEDevice(mac, hci_device=BLE_DEVICE,
+                                           app_options="-t random")
         self.bk.connect(timeout=DEFAULT_TIMEOUT)
         self.do_bat(None)
         self.prompt = "\033[1;34m[%s]\033[1;m blekey>" % mac

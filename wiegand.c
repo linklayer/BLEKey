@@ -52,7 +52,8 @@ void wiegand_init(Wiegand_ctx *ctx)
 	p_ctx = ctx;
 
 	retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
-    printf("Initializing wiegand shit...");
+    printf("Size of Wiegand_ctx = %d", sizeof(Wiegand_ctx));
+	printf("Initializing wiegand shit...");
 
     // Set the Wiegand control lines as outputs and pull them low
     nrf_gpio_cfg_output(DATA0_CTL);
@@ -179,7 +180,7 @@ void wiegand_task(void)
             printf( " Raw: 0x%llx Padded: 0x%llx\r\n", card_data, proxmark_fmt);
             // add card to struct for BLE transmission
             add_card(&proxmark_fmt, bit_count);
-        	num_reads++;
+			num_reads++;
 		}
 
         //reset vars for next read

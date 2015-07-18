@@ -34,7 +34,7 @@ USE_SOFTDEVICE := S110
 
 CFLAGS := -DDEBUG_NRF_USER -DBLE_STACK_SUPPORT_REQD -DS110
 
-ASMFLAGS := -D__HEAP_SIZE=2048
+ASMFLAGS := -D__HEAP_SIZE=1024
 
 # keep every function in separate section. This will allow linker to dump unused functions
 CFLAGS += -ffunction-sections -g -fdata-sections -O2
