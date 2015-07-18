@@ -69,7 +69,7 @@ JLINK_OPTS = -device nrf51822 -if swd -speed 4000
 JLINK_GDB_OPTS = -noir
 JLINK = $(JLINK_PATH)/JLinkExe $(JLINK_OPTS)
 JLINKD_GDB = JLinkGDBServer $(JLINK_GDB_OPTS)
-
+SOFTDEVICE = ../nordic/s110_nrf51822_7.1.0_softdevice.hex
 
 flash: flash.jlink
 	$(JLINK) flash.jlink
@@ -77,14 +77,20 @@ flash: flash.jlink
 flash.jlink:
 	printf "loadbin $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME).bin 0x16000\nr\ng\nexit\n" > flash.jlink
 
-erase-all: erase-all.jlink
-	$(JLINK) erase-all.jlink
+flash-sd: flash-sd.jlink
+	$(JLINK) flash-sd.jlink
 
-erase-all.jlink:
+flash-sd.jlink:
+	printf "loadbin $(SOFTDEVICE) 0\nr\ng\nexit\n" > flash-sd.jlink
+
+erase: erase.jlink
+	$(JLINK) erase.jlink
+
+erase.jlink:
 	# Write to NVMC to enable erase, do erase all, wait for completion. reset
-	printf "w4 4001e504 2\nw4 4001e50c 1\nsleep 100\nr\nexit\n" > erase-all.jlink
+	printf "w4 4001e504 2\nw4 4001e50c 1\nsleep 100\nr\nexit\n" > erase.jlink
 
 run-debug:
 	$(JLINKD_GDB) $(JLINK_OPTS) $(JLINK_GDB_OPTS) -port $(GDB_PORT_NUMBER)
 
-.PHONY:  flash-jlink flash.jlink erase-all erase-all.jlink run-debug
+.PHONY:  flash-jlink flash.jlink flash-sd flash-sd.jlink erase erase.jlink run-debug
