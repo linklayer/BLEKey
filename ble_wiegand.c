@@ -64,22 +64,8 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
     }
     if (p_evt_write->handle == p_wiegand->replay_handles.value_handle)
     {
-	send_wiegand();
-    /*
-		if (read_cnt % 2) {
-            nrf_gpio_pin_clear(8);
-            nrf_gpio_pin_clear(9);
-            nrf_gpio_pin_clear(10);
-            nrf_gpio_pin_clear(11);
-        } else {
-            nrf_gpio_pin_set(8);
-            nrf_gpio_pin_set(9);
-            nrf_gpio_pin_set(10);
-            nrf_gpio_pin_set(11);
-        }
-        read_cnt++;
-    */
-		return;
+    send_wiegand();
+    return;
     }
     if (p_evt_write->handle == p_wiegand->send_data_handles.value_handle)
     {
@@ -87,7 +73,7 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
     }
     if (p_evt_write->handle == p_wiegand->data_length_handles.value_handle)
     {
-	return;
+  return;
     }
 
 }
@@ -146,15 +132,15 @@ static uint32_t last_cards_char_add(ble_wiegand_t            * p_wiegand,
     attr_md.vloc       = BLE_GATTS_VLOC_STACK;
     attr_md.rd_auth    = 0;
     attr_md.wr_auth    = 0;
-    attr_md.vlen       = 0;
+    attr_md.vlen       = 1;
 
     memset(&attr_char_value, 0, sizeof(attr_char_value));
 
     attr_char_value.p_uuid    = &ble_uuid;
     attr_char_value.p_attr_md = &attr_md;
-    attr_char_value.init_len  = 22;
+    attr_char_value.init_len  = 0;
     attr_char_value.init_offs = 0;
-    attr_char_value.max_len   = 22;
+    attr_char_value.max_len   = WIEGAND_LAST_CARDS_MAX_LEN;
     attr_char_value.p_value   = 0;
 
     return sd_ble_gatts_characteristic_add(p_wiegand->service_handle,

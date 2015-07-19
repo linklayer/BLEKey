@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "nrf.h" // added
+#include "nrf.h"
 //#include "nrf51.h"
 //#include "nrf_gpiote.h" //added
 #include "nrf_gpio.h"
@@ -52,7 +52,7 @@ void wiegand_init(Wiegand_ctx *ctx)
 	p_ctx = ctx;
 
 	retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
-    printf("Size of Wiegand_ctx = %d", sizeof(Wiegand_ctx));
+    printf("Size of Wiegand_ctx = %d\r\n", sizeof(Wiegand_ctx));
 	printf("Initializing wiegand shit...");
 
     // Set the Wiegand control lines as outputs and pull them low
@@ -98,6 +98,7 @@ void add_card(uint64_t *data, uint8_t len)
 	// zero out old data to avoid garbage data from longer cards
 	memset(p_ctx->card_store[num_reads].data, 0, CARD_DATA_LEN);
 	memcpy(p_ctx->card_store[num_reads].data, data, CARD_DATA_LEN);
+	p_ctx->card_count++;
 }
 
 

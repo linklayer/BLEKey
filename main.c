@@ -791,6 +791,7 @@ int main(void)
 {
     // initialze wiegand context data struct
     Wiegand_ctx *wiegand_ctx = malloc(sizeof(Wiegand_ctx));
+	memset(wiegand_ctx, 0, sizeof(Wiegand_ctx));
 
     // Initialize.
     leds_init();
@@ -809,12 +810,12 @@ int main(void)
 	adc_init();
 
     // Enter main loop.
-    uint8_t buf[22];
+    //uint8_t buf[100];
     for (;;)
     {
         wiegand_task();
-        memcpy(buf, wiegand_ctx->card_store, 22);
-        ble_wiegand_last_cards_set(&m_wiegand, buf, 22);
+        ///memcpy(buf, wiegand_ctx->card_store, 100);
+        ble_wiegand_last_cards_set(&m_wiegand, (uint8_t *)wiegand_ctx->card_store, wiegand_ctx->card_count*sizeof(Card));
         power_manage();
     }
 }
