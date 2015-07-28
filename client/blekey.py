@@ -8,6 +8,7 @@ import os
 DEFAULT_MAC = "DE:AB:92:17:E6:41"
 # gatttool seems to take a long time getting data from the nrf51
 DEFAULT_TIMEOUT = 15
+CARD_DATA_LEN = 7
 BLE_DEVICE = "hci0"
 
 
@@ -67,7 +68,11 @@ class BLEKeyClient(cmd.Cmd):
     def do_readcards(self, _):
         print("reading last cards...")
         last_cards = self.bk.char_read_hnd(0x0b, timeout=DEFAULT_TIMEOUT)
-        for i in range(0, 3):
+        num_cards = len(last_cards) / CARD_DATA_LEN
+        if not last_cards:
+            print("no cards read/received from BLEKey...")
+            return
+        for i in range(0, num_cards):
             start = i * 7
             print ("%d. %d bit card:" % (i, last_cards[start])),
             card_data = reversed(last_cards[start + 1:start + 6])

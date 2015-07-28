@@ -140,7 +140,7 @@ static uint32_t last_cards_char_add(ble_wiegand_t            * p_wiegand,
     attr_char_value.p_attr_md = &attr_md;
     attr_char_value.init_len  = 0;
     attr_char_value.init_offs = 0;
-    attr_char_value.max_len   = WIEGAND_LAST_CARDS_MAX_LEN;
+    attr_char_value.max_len   = BLE_MAX_TX_LEN;
     attr_char_value.p_value   = 0;
 
     return sd_ble_gatts_characteristic_add(p_wiegand->service_handle,

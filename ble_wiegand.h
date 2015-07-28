@@ -6,13 +6,16 @@
 #include "ble.h"
 #include "ble_srv_common.h"
 
+#include "wiegand.h"
+
 // service defines
-#define BLE_UUID_WIEGAND_LAST_CARDS	0xAAAA				
-#define WIEGAND_LAST_CARDS_MAX_LEN	511
-#define BLE_UUID_WIEGAND_REPLAY		0xBBBB	
-#define BLE_UUID_WIEGAND_SEND_DATA      0xCCCC	
+#define BLE_UUID_WIEGAND_LAST_CARDS	0xAAAA
+#define BLE_MAX_TX_LEN	511
+#define BLE_MAX_CARDS BLE_MAX_TX_LEN/sizeof(Card)
+#define BLE_UUID_WIEGAND_REPLAY		0xBBBB
+#define BLE_UUID_WIEGAND_SEND_DATA      0xCCCC
 #define BLE_UUID_WIEGAND_SEND_DATA_LEN  20
-#define BLE_UUID_WIEGAND_DATA_LENGTH	0xDDDD	
+#define BLE_UUID_WIEGAND_DATA_LENGTH	0xDDDD
 
 /**@brief Heart Rate Service event type. */
 typedef enum {
@@ -26,7 +29,7 @@ typedef struct
     ble_wiegand_evt_type_t evt_type;                        /**< Type of event. */
 } ble_wiegand_evt_t;
 
-// Forward declaration of the ble_wiegand_t type. 
+// Forward declaration of the ble_wiegand_t type.
 typedef struct ble_wiegand_s ble_wiegand_t;
 
 /**@brief Heart Rate Service event handler type. */

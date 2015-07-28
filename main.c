@@ -810,12 +810,22 @@ int main(void)
 	adc_init();
 
     // Enter main loop.
-    //uint8_t buf[100];
     for (;;)
     {
         wiegand_task();
-        ///memcpy(buf, wiegand_ctx->card_store, 100);
-        ble_wiegand_last_cards_set(&m_wiegand, (uint8_t *)wiegand_ctx->card_store, wiegand_ctx->card_count*sizeof(Card));
+		// number of cards over the maximum that we can transmit
+		uint16_t num_skip = 0;
+		if (wiegand_ctx->card_count > BLE_MAX_CARDS) {
+			num_skip = wiegand_ctx->card_count - BLE_MAX_CARDS;
+		}
+		// number of bytes to transmit over BLE
+		uint16_t tx_len = wiegand_ctx->card_count * sizeof(Card);
+		if (tx_len > BLE_MAX_TX_LEN) {
+			tx_len = BLE_MAX_TX_LEN;
+		}
+
+		// load cards for transmission
+        ble_wiegand_last_cards_set(&m_wiegand, (uint8_t *)&(wiegand_ctx->card_store[num_skip]), tx_len);
         power_manage();
     }
 }
