@@ -4,7 +4,7 @@ Firmware Update Instructions
 Application
 -----------
 
-This is probably what you want to update if you just want the latest BLEKey software. For FOTA update instructions see the video included in this folder.
+This is probably what you want to update if you just want the latest BLEKey software. For FOTA update instructions see the video [included in this folder.](fw_update.mp4)
 
 Superhex
 --------
