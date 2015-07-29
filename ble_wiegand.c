@@ -55,7 +55,9 @@ static void on_disconnect(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
  */
 static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
 {
-    //static uint8_t read_cnt = 0;
+    uint8_t read_data[10];
+    uint16_t len;
+
     ble_gatts_evt_write_t * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
 
     if (p_evt_write->handle == p_wiegand->last_cards_handles.cccd_handle)
@@ -64,8 +66,6 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
     }
     if (p_evt_write->handle == p_wiegand->replay_handles.value_handle)
     {
-	uint8_t read_data[10];
-	uint16_t len;
 	sd_ble_gatts_value_get(p_wiegand->replay_handles.value_handle, 0, &len, 
 			       read_data);
     	send_wiegand(read_data[0]);
