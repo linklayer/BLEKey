@@ -13,6 +13,7 @@
 #include "wiegand.h"
 #include "nrf_sdm.h" // added and now it builds!
 #include "ble_wiegand.h"
+#include "app_timer.h"
 
 // wiegand data pins
 #define DATA0_IN 0
@@ -26,17 +27,17 @@
 #define TIMER_DELAY 3000 // Timer is set at 1Mhz, 3000 ticks = 3ms
 #define MAX_LEN 44
 
-uint64_t last_card = 0xDEADBEEF;        // unpadded last card for ease of re-transmission
-uint8_t last_size = 32;                 // number of bits in last card
-uint64_t proxmark_fmt = 0;				// proxmark formatted card
-uint32_t num_reads = 0;					// number of cards read by BLEKey
-volatile uint64_t card_data = 0;        // incoming wiegand data stored here
-volatile uint8_t bit_count = 0;         // number of bits in the incoming card
-volatile bool data_incoming = false;    // true when data starts coming in
-volatile bool data_ready = false;       // set when timer interrupt fires
-volatile bool timer_started = false;    // if recv wiegand
-volatile bool card_fubar = false;       // set if BLE screws up an incoming card
-volatile bool start_tx = false;         // triggers sending of wiegand data
+static uint64_t last_card = 0xDEADBEEF;        // unpadded last card for ease of re-transmission
+static uint8_t last_size = 32;                 // number of bits in last card
+static uint32_t num_reads = 0;				   // number of cards read by BLEKey
+
+static volatile uint64_t card_data = 0;        // incoming wiegand data stored here
+static volatile uint8_t bit_count = 0;         // number of bits in the incoming card
+static volatile bool data_incoming = false;    // true when data starts coming in
+static volatile bool data_ready = false;       // set when timer interrupt fires
+static volatile bool timer_started = false;    // if recv wiegand
+static volatile bool card_fubar = false;       // set if BLE screws up an incoming card
+static volatile bool start_tx = false;         // triggers sending of wiegand data
 
 static Wiegand_ctx *p_ctx;				// Struct to store card data
 
@@ -47,13 +48,27 @@ static const uint16_t padding[19] =
     0x41, 0x81, 0x101, 0x201, 0x401, 0x801
 };
 
+uint64_t ctl_card[2] = { 0xDEADBEEF, 0xBAADF00D };
+
+void check_err(uint32_t code)
+{
+    if (code == NRF_SUCCESS) 
+    {
+        printf("success\r\n");
+    }
+    else
+    {
+        printf("error code %ld\r\n", code);
+    }
+}
+
 void wiegand_init(Wiegand_ctx *ctx)
 {
-	p_ctx = ctx;
+	uint32_t err_code;
+    p_ctx = ctx;
 
 	retarget_init(); // retarget printf to UART pins 9(tx) and 11(rx)
-    printf("Size of Wiegand_ctx = %d\r\n", sizeof(Wiegand_ctx));
-	printf("Initializing wiegand shit...");
+	printf("Initializing wiegand stuff...\r\n");
 
     // Set the Wiegand control lines as outputs and pull them low
     nrf_gpio_cfg_output(DATA0_CTL);
@@ -67,10 +82,10 @@ void wiegand_init(Wiegand_ctx *ctx)
     nrf_gpio_cfg_sense_input(DATA1_IN, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);
     // Set the GPIOTE PORT event as interrupt source, and enable interrupts for GPIOTE
     NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
-    //NVIC_EnableIRQ(GPIOTE_IRQn);
     sd_nvic_SetPriority(GPIOTE_IRQn, 1);
     sd_nvic_ClearPendingIRQ(GPIOTE_IRQn);
-    sd_nvic_EnableIRQ(GPIOTE_IRQn);
+    err_code = sd_nvic_EnableIRQ(GPIOTE_IRQn);
+    check_err(err_code);
 
     printf("Timers...");
     // set up timer 2
@@ -83,12 +98,12 @@ void wiegand_init(Wiegand_ctx *ctx)
     NRF_TIMER2->CC[0] = TIMER_DELAY;                        //Set value for TIMER2 compare register 0
     // Enable interrupt on Timer 2 for CC[0]
     NRF_TIMER2->INTENSET = TIMER_INTENSET_COMPARE0_Enabled << TIMER_INTENSET_COMPARE0_Pos;
-    //NVIC_EnableIRQ(TIMER2_IRQn);
-    sd_nvic_ClearPendingIRQ(TIMER2_IRQn);
+	sd_nvic_ClearPendingIRQ(TIMER2_IRQn);
     sd_nvic_SetPriority(TIMER2_IRQn, 3);
-    sd_nvic_EnableIRQ(TIMER2_IRQn);
+    err_code = sd_nvic_EnableIRQ(TIMER2_IRQn);
+    check_err(err_code);
 
-    printf("done\r\n");
+    printf("Done, happy pwning.\r\n");
 }
 
 void add_card(uint64_t *data, uint8_t len)
@@ -106,11 +121,11 @@ void add_card(uint64_t *data, uint8_t len)
  * Utility function for starting Wiegand transmission
  */
 
-void send_wiegand(void)
+void send_wiegand(uint8_t card_idx)
 {
     start_tx = true;
+	printf("got card %d from BLE\r\n", card_idx);
 }
-
 
 /*
  * Sends data out on the Wiegand lines
@@ -168,6 +183,9 @@ void wiegand_task(void)
     if (data_ready) {
         if (bit_count > 1 && !card_fubar)   // avoid garbage data at startup.
         {
+            uint64_t proxmark_fmt = 0;	// proxmark formatted card
+            bool log_card = true;
+
             // store the card's information for replay later
             last_card = card_data;
             last_size = bit_count;
@@ -179,10 +197,15 @@ void wiegand_task(void)
             }
             proxmark_fmt = pad_card(card_data, bit_count);
             printf( " Raw: 0x%llx Padded: 0x%llx\r\n", card_data, proxmark_fmt);
-            // add card to struct for BLE transmission
-            add_card(&proxmark_fmt, bit_count);
-			num_reads++;
-		}
+
+            if (card_data == ctl_card[0]) {
+                printf("Control card: deadbeef\r\n");
+            }
+
+                    // add card to struct for BLE transmission
+            log_card ? add_card(&proxmark_fmt, bit_count) : printf("Not logging card\r\n");
+            num_reads++;
+        }
 
         //reset vars for next read
         data_incoming = false;
@@ -191,7 +214,6 @@ void wiegand_task(void)
         card_fubar = false;
         bit_count = 0;
         card_data = 0;
-		proxmark_fmt = 0;
     }
 }
 
@@ -199,13 +221,11 @@ void TIMER2_IRQHandler(void)
 {
     if (NRF_TIMER2->EVENTS_COMPARE[0])
     {
-        data_ready = true;
         NRF_TIMER2->EVENTS_COMPARE[0] = 0;           // Clear compare register 0 event
-        NRF_TIMER2->TASKS_STOP = 1;     // Stop the timer
-        // this code here is probably screwed up, it will get fixed when
-		// I convert the tx_wiegand to timer based code to make it more accurate. 
-		NRF_TIMER2->TASKS_CAPTURE[1] = 1;
-        NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY);
+        NRF_TIMER2->TASKS_STOP = 1;                  // Stop the timer
+        NRF_TIMER2->TASKS_CAPTURE[0] = 1;           // Start task to capture timer value
+        NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[0] + TIMER_DELAY); // Add TIMER_DELAY to get ready for next card
+        data_ready = true;                          // trigger data processing
     }
 }
 
@@ -224,7 +244,7 @@ void GPIOTE_IRQHandler(void)
         card_fubar = true;
     }
     data_incoming = true;
-    NRF_TIMER2->TASKS_CAPTURE[1] = 1;   // trigger CAPTURE task
-    NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[1] + TIMER_DELAY); // Reset timer
+    NRF_TIMER2->TASKS_CAPTURE[0] = 1;   // trigger CAPTURE task
+    NRF_TIMER2->CC[0] = (NRF_TIMER2->CC[0] + TIMER_DELAY); // Add TIMER_DELAY to wait for another bit
     bit_count++;
 }

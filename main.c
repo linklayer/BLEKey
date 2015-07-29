@@ -54,10 +54,10 @@
 
 #define ADVERTISING_LED_PIN_NO               20                                         /**< Is on when device is advertising. */
 
-#define DEVICE_NAME                          "BLEPenis"                                   /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME                          "BLEKey"                                   /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME                    "MB_EE"                                   /**< Manufacturer. Will be passed to Device Information Service. */
-#define APP_ADV_INTERVAL                     0x0C80                                    /**< The advertising interval (in units of 0.625 ms. This value corresponds to 25 ms). */
-#define APP_ADV_TIMEOUT_IN_SECONDS           0                                        /**< The advertising timeout in units of seconds. */
+#define APP_ADV_INTERVAL                     0x0C80                                    /**< The advertising interval (in units of 0.625 ms). */
+#define APP_ADV_TIMEOUT_IN_SECONDS           0                                       /**< The advertising timeout in units of seconds. */
 
 #define APP_TIMER_PRESCALER                  0                                          /**< Value of the RTC1 PRESCALER register. */
 #define APP_TIMER_MAX_TIMERS                 6                                          /**< Maximum number of simultaneously created timers. */
@@ -76,8 +76,8 @@
 
 #define SEC_PARAM_TIMEOUT                    30                                         /**< Timeout for Pairing Request or Security Request (in seconds). */
 #define SEC_PARAM_BOND                       1                                          /**< Perform bonding. */
-#define SEC_PARAM_MITM                       0                                          /**< Man In The Middle protection not required. */
-#define SEC_PARAM_IO_CAPABILITIES            BLE_GAP_IO_CAPS_NONE                       /**< No I/O capabilities. */
+#define SEC_PARAM_MITM                       1                                          /**< Changed from default! */
+#define SEC_PARAM_IO_CAPABILITIES            BLE_GAP_IO_CAPS_DISPLAY_ONLY
 #define SEC_PARAM_OOB                        0                                          /**< Out Of Band data not available. */
 #define SEC_PARAM_MIN_KEY_SIZE               7                                          /**< Minimum encryption key size. */
 #define SEC_PARAM_MAX_KEY_SIZE               16                                         /**< Maximum encryption key size. */
@@ -92,8 +92,8 @@ static ble_bas_t                             m_bas;                             
 static ble_wiegand_t                         m_wiegand;                                 /**< Structure used to identify the heart rate service. */
 
 static app_timer_id_t                        m_battery_timer_id;                        /**< Battery timer. */
-static app_timer_id_t                        m_heart_rate_timer_id;                     /**< Heart rate measurement timer. */
-static app_timer_id_t                        m_sensor_contact_timer_id;                 /**< Sensor contact detected timer. */
+//static app_timer_id_t                        m_heart_rate_timer_id;                     /**< Heart rate measurement timer. */
+//static app_timer_id_t                        m_sensor_contact_timer_id;                 /**< Sensor contact detected timer. */
 
 static dm_application_instance_t             m_app_handle;                              /**< Application identifier allocated by device manager */
 
@@ -240,7 +240,7 @@ static void battery_level_meas_timeout_handler(void * p_context)
  *
  * @param[in]   p_context   Pointer used for passing some arbitrary information (context) from the
  *                          app_start_timer() call to the timeout handler.
- */
+ *
 static void heart_rate_meas_timeout_handler(void * p_context)
 {
     static uint8_t cnt = 0;
@@ -249,7 +249,7 @@ static void heart_rate_meas_timeout_handler(void * p_context)
 
     cnt++;
 }
-
+*/
 
 /**@brief Function for handling the Sensor Contact Detected timer timeout.
  *
@@ -257,7 +257,7 @@ static void heart_rate_meas_timeout_handler(void * p_context)
  *
  * @param[in]   p_context   Pointer used for passing some arbitrary information (context) from the
  *                          app_start_timer() call to the timeout handler.
- */
+ *
 static void sensor_contact_detected_timeout_handler(void * p_context)
 {
     static bool sensor_contact_detected = false;
@@ -267,7 +267,7 @@ static void sensor_contact_detected_timeout_handler(void * p_context)
     sensor_contact_detected = !sensor_contact_detected;
     ble_wiegand_sensor_contact_detected_update(&m_wiegand, sensor_contact_detected);
 }
-
+*/
 
 /**@brief Function for the LEDs initialization.
  *
@@ -296,7 +296,10 @@ static void timers_init(void)
                                 battery_level_meas_timeout_handler);
     APP_ERROR_CHECK(err_code);
 
-    err_code = app_timer_create(&m_heart_rate_timer_id,
+    /* 
+	 * these timers are from the examples and don't get used.
+	 *
+	err_code = app_timer_create(&m_heart_rate_timer_id,
                                 APP_TIMER_MODE_REPEATED,
                                 heart_rate_meas_timeout_handler);
     APP_ERROR_CHECK(err_code);
@@ -305,6 +308,7 @@ static void timers_init(void)
                                 APP_TIMER_MODE_REPEATED,
                                 sensor_contact_detected_timeout_handler);
     APP_ERROR_CHECK(err_code);
+	*/
 }
 
 
@@ -339,11 +343,6 @@ static void gap_params_init(void)
     err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
     APP_ERROR_CHECK(err_code);
 
-	//passkey setup
-	ble_opt_t ble_opt;
-	ble_opt.gap.passkey.p_passkey = &passkey[0];
-	err_code =  sd_ble_opt_set(BLE_GAP_OPT_PASSKEY, &ble_opt);
-	APP_ERROR_CHECK(err_code);
 }
 
 
@@ -708,9 +707,14 @@ static void sys_evt_dispatch(uint32_t sys_evt)
 static void ble_stack_init(void)
 {
     uint32_t err_code;
+    // https://devzone.nordicsemi.com/question/953/what-low-frequency-clock-sources-can-i-use/
 
-    // Initialize the SoftDevice handler module.
-    SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_RC_250_PPM_250MS_CALIBRATION,
+    // Initialize the SoftDevice handler module (internal RC oscillator)
+    //SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_RC_250_PPM_250MS_CALIBRATION,
+    //                        false);
+
+    // Initialize the SoftDevice handler module (external XTAL)
+    SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_XTAL_250_PPM,
                             false);
 
 #ifdef S110
@@ -758,6 +762,12 @@ static void device_manager_init(void)
 
     err_code = dm_init(&init_data);
     APP_ERROR_CHECK(err_code);
+
+	//passkey setup
+	ble_opt_t ble_opt;
+	ble_opt.gap.passkey.p_passkey = &passkey[0];
+	err_code =  sd_ble_opt_set(BLE_GAP_OPT_PASSKEY, &ble_opt);
+	APP_ERROR_CHECK(err_code);
 
     memset(&register_param.sec_param, 0, sizeof(ble_gap_sec_params_t));
 

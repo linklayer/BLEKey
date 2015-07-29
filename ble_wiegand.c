@@ -64,7 +64,7 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
     }
     if (p_evt_write->handle == p_wiegand->replay_handles.value_handle)
     {
-    send_wiegand();
+    send_wiegand(p_wiegand->replay_handles.value_handle);
     return;
     }
     if (p_evt_write->handle == p_wiegand->send_data_handles.value_handle)
