@@ -64,11 +64,11 @@ static void on_write(ble_wiegand_t * p_wiegand, ble_evt_t * p_ble_evt)
     }
     if (p_evt_write->handle == p_wiegand->replay_handles.value_handle)
     {
-	uint8_t card_id;
-	uint16_t len = sizeof(card_id);
+	uint8_t read_data[10];
+	uint16_t len;
 	sd_ble_gatts_value_get(p_wiegand->replay_handles.value_handle, 0, &len, 
-			       &card_id);
-    	send_wiegand(card_id);
+			       read_data);
+    	send_wiegand(read_data[0]);
     	return;
     }
     if (p_evt_write->handle == p_wiegand->send_data_handles.value_handle)
