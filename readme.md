@@ -1,13 +1,18 @@
 BLEKey
 ======
 
+by Mark Baseggio and Eric Evenchick
+
+BLEKey is a tool designed to demonstrate the risks of using the Wiegand protocol. 
 
 Flashing
 --------
 
-###MacOS
+###MacOS or Linux
 
 To flash the softdevice and BLEKey firmware from the CLI you can use JLinkExe which is provided in the [Segger Software](https://www.segger.com/jlink-software.html)
+
+The BLEKey requires a softdevice (for BLE) and the blekey firmware. These can be flashed using the commands below:
 
 ```
 $ /usr/bin/JLinkExe -device nrf51822_xxaa -if swd -speed 4000
@@ -17,6 +22,8 @@ J-Link>loadbin blekey_s110_xxaa.hex 0x16000
 J-Link>r
 J-Link>g
 ```
+
+We've also included a file in the `/firmware` folder called `super.hex`. 
 
 Erasing:
 ```
@@ -30,7 +37,7 @@ The cheatsheet above is [ripped from Nordic's blog](https://devzone.nordicsemi.c
 
 ###Windows
 
-Use tools from Nordic. 
+Use tools from Nordic.
 
 Using BLEKey
 ------------
