@@ -8,6 +8,11 @@ BLEKey is a tool designed to demonstrate the risks of using the Wiegand protocol
 Flashing
 --------
 
+###Firmware Over the Air (FOTA)
+We've included a file in the `/firmware` folder called `super.hex`. This firmware has a bootloader included that allows the BLEKey to be flashed from a cell phone by shorting the first and last pins of the P2 port, and inserting a battery. The firmware update has been tested on the Android platform using the Nordic Master Control Panel tool.
+
+[We've created a video to demonstrate the process.](/firmware/fw_update.mp4)
+
 ###MacOS or Linux
 
 To flash the softdevice and BLEKey firmware from the CLI you can use JLinkExe which is provided in the [Segger Software](https://www.segger.com/jlink-software.html)
@@ -22,8 +27,6 @@ J-Link>loadbin blekey_s110_xxaa.hex 0x16000
 J-Link>r
 J-Link>g
 ```
-
-We've also included a file in the `/firmware` folder called `super.hex`. 
 
 Erasing:
 ```
@@ -94,7 +97,7 @@ sudo gatttool -t random -b D4:34:E8:CA:6F:6A --char-write-req -a 0x000d -n 01
 Pinouts
 -------
 
-###Harware rev. 1 code name Acamas
+###Harware rev. 0 code name Acamas
 
 | Pin	| Function 		|
 | ------|---------------|
@@ -111,7 +114,7 @@ Pinouts
 | 35	| DIO			|
 | 36	| CLK			|
 
-###Hardware rev. 2 Agapenor
+###Hardware rev. 1 Agapenor
 
 Pinouts are identical to Acamas unless otherwise noted.
 
@@ -135,7 +138,7 @@ Pinouts are identical to Acamas unless otherwise noted.
 
 | Pin	| Function 		|
 | ------|---------------|
-| 0     | GPIO		 	|
-| 1		| GPIO/serial	|
-| 2		| GPIO/serial	|
+| 0     | GPIO (Tx)	 	|
+| 1		| DATA0			|
+| 2		| DATA1			|
 | 3     | Gnd			|
