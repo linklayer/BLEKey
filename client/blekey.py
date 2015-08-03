@@ -58,12 +58,23 @@ class BLEKeyClient(cmd.Cmd):
         print("If you don't know the device's MAC try using scan first.\
               Tab completion is your friend.")
 
-    def do_tx(self, data):
-        print("sending...")
-        self.bk.char_write(0x0d, [0x01])
+    def do_tx(self, line):
+        if not line:
+            data = [0xFF]
+            print("Replaying last card...")
+        else:
+            print("Replaying card %s..." % line)
+            try:
+                data = [int(line)]
+            except ValueError:
+                print("Error. Please provide a number between 0-255")
+                return
+        self.bk.char_write(0x0d, data)
 
     def help_tx(self):
-        print("Currently the tx command sends the card read by BLEKey")
+        print("Usage: tx <num>")
+        print("Without an argument tx defaults to the last card read by"
+              "BLEKey.")
 
     def do_readcards(self, _):
         print("reading last cards...")

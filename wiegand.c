@@ -66,11 +66,11 @@ void check_err(uint32_t code)
 
 void dos_timer_handler(void * p_context)
 {
-	nrf_gpio_pin_clear(DATA0_CTL);
+    nrf_gpio_pin_clear(DATA0_CTL);
     nrf_gpio_pin_clear(DATA1_CTL);
-	sd_nvic_EnableIRQ(GPIOTE_IRQn);
-	app_timer_stop(dos_timer_id);
-	printf("timer off - DoS complete...\r\n");
+    sd_nvic_EnableIRQ(GPIOTE_IRQn);
+    app_timer_stop(dos_timer_id);
+    printf("timer off - DoS complete...\r\n");
 }
 
 void wiegand_init(Wiegand_ctx *ctx)
@@ -114,11 +114,11 @@ void wiegand_init(Wiegand_ctx *ctx)
     err_code = sd_nvic_EnableIRQ(TIMER2_IRQn);
     check_err(err_code);
 
-	printf("Configuring app timer for DoS function...\r\n");
-	err_code = app_timer_create(&dos_timer_id,
+    printf("Configuring app timer for DoS function...\r\n");
+    err_code = app_timer_create(&dos_timer_id,
                                 APP_TIMER_MODE_REPEATED,
                                 dos_timer_handler);
-	check_err(err_code);
+    check_err(err_code);
 
     printf("Done, happy pwning.\r\n");
 }
@@ -223,10 +223,10 @@ void wiegand_task(void)
                     printf("Control card: deadbeef\r\n");
                     printf("Replay last card %llx\r\n", last_card);
                     printf("DoS Wiegand for 20 seconds...\r\n");
-					sd_nvic_DisableIRQ(GPIOTE_IRQn);
-					nrf_gpio_pin_set(DATA0_CTL);
-    				nrf_gpio_pin_set(DATA1_CTL);
-					app_timer_start(dos_timer_id, APP_TIMER_TICKS(20000, 0), NULL);
+                    sd_nvic_DisableIRQ(GPIOTE_IRQn);
+                    nrf_gpio_pin_set(DATA0_CTL);
+                    nrf_gpio_pin_set(DATA1_CTL);
+                    app_timer_start(dos_timer_id, APP_TIMER_TICKS(20000, 0), NULL);
                     break;
                 case CTL_CARD_2:
                     printf("Control card baadf00d\r\n");

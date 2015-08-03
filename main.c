@@ -233,42 +233,6 @@ static void battery_level_meas_timeout_handler(void * p_context)
 }
 
 
-/**@brief Function for handling the Heart rate measurement timer timeout.
- *
- * @details This function will be called each time the heart rate measurement timer expires.
- *          It will exclude RR Interval data from every third measurement.
- *
- * @param[in]   p_context   Pointer used for passing some arbitrary information (context) from the
- *                          app_start_timer() call to the timeout handler.
- *
-static void heart_rate_meas_timeout_handler(void * p_context)
-{
-    static uint8_t cnt = 0;
-
-    UNUSED_PARAMETER(p_context);
-
-    cnt++;
-}
-*/
-
-/**@brief Function for handling the Sensor Contact Detected timer timeout.
- *
- * @details This function will be called each time the Sensor Contact Detected timer expires.
- *
- * @param[in]   p_context   Pointer used for passing some arbitrary information (context) from the
- *                          app_start_timer() call to the timeout handler.
- *
-static void sensor_contact_detected_timeout_handler(void * p_context)
-{
-    static bool sensor_contact_detected = false;
-
-    UNUSED_PARAMETER(p_context);
-
-    sensor_contact_detected = !sensor_contact_detected;
-    ble_wiegand_sensor_contact_detected_update(&m_wiegand, sensor_contact_detected);
-}
-*/
-
 /**@brief Function for the LEDs initialization.
  *
  * @details Initializes all LEDs used by this application.
@@ -295,20 +259,6 @@ static void timers_init(void)
                                 APP_TIMER_MODE_REPEATED,
                                 battery_level_meas_timeout_handler);
     APP_ERROR_CHECK(err_code);
-
-    /* 
-	 * these timers are from the examples and don't get used.
-	 *
-	err_code = app_timer_create(&m_heart_rate_timer_id,
-                                APP_TIMER_MODE_REPEATED,
-                                heart_rate_meas_timeout_handler);
-    APP_ERROR_CHECK(err_code);
-
-    err_code = app_timer_create(&m_sensor_contact_timer_id,
-                                APP_TIMER_MODE_REPEATED,
-                                sensor_contact_detected_timeout_handler);
-    APP_ERROR_CHECK(err_code);
-	*/
 }
 
 
@@ -520,7 +470,6 @@ static void application_timers_start(void)
     // Start application timers.
     err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL, NULL);
     APP_ERROR_CHECK(err_code);
-
 }
 
 
@@ -615,13 +564,10 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
     {
     case BLE_GAP_EVT_CONNECTED:
         nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
-
         m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
         break;
 
     case BLE_GAP_EVT_DISCONNECTED:
-
-
         advertising_start();
         break;
 
@@ -629,7 +575,6 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
         if (p_ble_evt->evt.gap_evt.params.timeout.src == BLE_GAP_TIMEOUT_SRC_ADVERTISEMENT)
         {
             nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
-
             // Go to system-off mode (this function will not return; wakeup will cause a reset).
             err_code = sd_power_system_off();
             APP_ERROR_CHECK(err_code);
