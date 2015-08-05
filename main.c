@@ -84,7 +84,6 @@
 
 #define DEAD_BEEF                            0xDEADBEEF                                 /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 #define VBAT_MAX_IN_MV						 3000
-#define STATIC_PASSKEY						 "123456"
 
 static uint16_t                              m_conn_handle = BLE_CONN_HANDLE_INVALID;   /**< Handle of the current connection. */
 static ble_gap_adv_params_t                  m_adv_params;                              /**< Parameters to be passed to the stack when starting advertising. */
@@ -102,9 +101,16 @@ static bool                                  m_memory_access_in_progress = false
 static ble_dfu_t                             m_dfus;                                    /**< Structure used to identify the DFU service. */
 #endif // BLE_DFU_APP_SUPPORT
 
-static uint8_t passkey[] = STATIC_PASSKEY;
 
-#if 0
+static ble_gap_whitelist_t  whitelist;
+static ble_gap_addr_t* whitelist_addrs[BLE_GAP_WHITELIST_ADDR_MAX_COUNT];
+static ble_gap_irk_t* whitelist_irks[BLE_GAP_WHITELIST_IRK_MAX_COUNT];
+static ble_gap_addr_t addr_1;
+static ble_gap_addr_t addr_2;
+static ble_gap_addr_t addr_3;
+static ble_gap_addr_t addr_4;
+
+#if 1
 /**@brief Function for error handling, which is called when an error has occurred.
  *
  * @warning This handler is an example only and does not fit a final product. You need to analyze
@@ -125,8 +131,9 @@ void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p
     //                Use with care. Uncomment the line below to use.
     // ble_debug_assert_handler(error_code, line_num, p_file_name);
 
+    printf("%ld\n", error_code);
     // On assert, the system can only recover with a reset.
-    NVIC_SystemReset();
+    //NVIC_SystemReset();
 }
 #else
 #include "app_util_platform.h"
@@ -141,9 +148,9 @@ void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p
     CRITICAL_REGION_ENTER();
     /* Light a LED on error or warning. */
 
-//    m_p_file_name = p_file_name;
-//    m_error_code = error_code;
-//    m_line_num = line_num;
+    //    m_p_file_name = p_file_name;
+    //    m_error_code = error_code;
+    //    m_line_num = line_num;
 
     /* To be able to see function parameters in a debugger. */
     uint32_t temp = 1;
@@ -173,12 +180,12 @@ void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
 //ADC initialization
 static void adc_init(void)
 {
-	// Configure ADC
+    // Configure ADC
     NRF_ADC->CONFIG     = (ADC_CONFIG_RES_8bit                        << ADC_CONFIG_RES_Pos)     |
-                          (ADC_CONFIG_INPSEL_SupplyOneThirdPrescaling << ADC_CONFIG_INPSEL_Pos)  |
-                          (ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos)  |
-                          (ADC_CONFIG_PSEL_Disabled                   << ADC_CONFIG_PSEL_Pos)    |
-                          (ADC_CONFIG_EXTREFSEL_None                  << ADC_CONFIG_EXTREFSEL_Pos);
+        (ADC_CONFIG_INPSEL_SupplyOneThirdPrescaling << ADC_CONFIG_INPSEL_Pos)  |
+        (ADC_CONFIG_REFSEL_VBG                      << ADC_CONFIG_REFSEL_Pos)  |
+        (ADC_CONFIG_PSEL_Disabled                   << ADC_CONFIG_PSEL_Pos)    |
+        (ADC_CONFIG_EXTREFSEL_None                  << ADC_CONFIG_EXTREFSEL_Pos);
     NRF_ADC->EVENTS_END = 0;
     NRF_ADC->ENABLE     = ADC_ENABLE_ENABLE_Enabled;
 }
@@ -191,7 +198,7 @@ static void battery_level_update(void)
     uint32_t err_code;
     uint8_t  battery_level;
 
-	NRF_ADC->EVENTS_END  = 0;    // Stop any running conversions.
+    NRF_ADC->EVENTS_END  = 0;    // Stop any running conversions.
     NRF_ADC->TASKS_START = 1;
 
     while (!NRF_ADC->EVENTS_END)
@@ -209,10 +216,10 @@ static void battery_level_update(void)
 
     err_code = ble_bas_battery_level_update(&m_bas, battery_level);
     if ((err_code != NRF_SUCCESS) &&
-        (err_code != NRF_ERROR_INVALID_STATE) &&
-        (err_code != BLE_ERROR_NO_TX_BUFFERS) &&
-        (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
-        )
+            (err_code != NRF_ERROR_INVALID_STATE) &&
+            (err_code != BLE_ERROR_NO_TX_BUFFERS) &&
+            (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
+       )
     {
         APP_ERROR_HANDLER(err_code);
     }
@@ -256,8 +263,8 @@ static void timers_init(void)
 
     // Create timers.
     err_code = app_timer_create(&m_battery_timer_id,
-                                APP_TIMER_MODE_REPEATED,
-                                battery_level_meas_timeout_handler);
+            APP_TIMER_MODE_REPEATED,
+            battery_level_meas_timeout_handler);
     APP_ERROR_CHECK(err_code);
 }
 
@@ -276,8 +283,8 @@ static void gap_params_init(void)
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
     err_code = sd_ble_gap_device_name_set(&sec_mode,
-                                          (const uint8_t *)DEVICE_NAME,
-                                          strlen(DEVICE_NAME));
+            (const uint8_t *)DEVICE_NAME,
+            strlen(DEVICE_NAME));
     APP_ERROR_CHECK(err_code);
 
     err_code = sd_ble_gap_appearance_set(BLE_APPEARANCE_HEART_RATE_SENSOR_HEART_RATE_BELT);
@@ -305,14 +312,13 @@ static void advertising_init(void)
 {
     uint32_t      err_code;
     ble_advdata_t advdata;
-    uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
+    uint8_t       flags = BLE_GAP_ADV_FLAG_BR_EDR_NOT_SUPPORTED;
 
     ble_uuid_t adv_uuids[] =
-        {
-            {BLE_UUID_HEART_RATE_SERVICE,         BLE_UUID_TYPE_BLE},
-            {BLE_UUID_BATTERY_SERVICE,            BLE_UUID_TYPE_BLE},
-            {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
-        };
+    {
+        {BLE_UUID_BATTERY_SERVICE,            BLE_UUID_TYPE_BLE},
+        {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
+    };
 
     // Build and set advertising data.
     memset(&advdata, 0, sizeof(advdata));
@@ -327,14 +333,69 @@ static void advertising_init(void)
     err_code = ble_advdata_set(&advdata, NULL);
     APP_ERROR_CHECK(err_code);
 
+    memset(&whitelist, 0, sizeof(whitelist));
+
+    addr_1.addr[0] = 0x89;
+    addr_1.addr[1] = 0xEC;
+    addr_1.addr[2] = 0xCE;
+    addr_1.addr[3] = 0xC2;
+    addr_1.addr[4] = 0x15;
+    addr_1.addr[5] = 0x3C;
+    addr_1.addr_type = 0;
+    /*
+
+       addr_1.addr[0] = 0xE4;
+       addr_1.addr[1] = 0x0C;
+       addr_1.addr[1] = 0x69;
+       addr_1.addr[1] = 0x70;
+       addr_1.addr[4] = 0xF1;
+       addr_1.addr[5] = 0x5C;
+       addr_1.addr_type = 0;
+       */
+
+    addr_2.addr[0] = 0x9A;
+    addr_2.addr[1] = 0x0F;
+    addr_2.addr[2] = 0xBD;
+    addr_2.addr[3] = 0xC6;
+    addr_2.addr[4] = 0x86;
+    addr_2.addr[5] = 0xA0;
+    addr_2.addr_type = 0;
+
+    addr_3.addr[0] = 0xE4;
+    addr_3.addr[1] = 0x0B;
+    addr_3.addr[2] = 0x69;
+    addr_3.addr[3] = 0x70;
+    addr_3.addr[4] = 0xF3;
+    addr_3.addr[5] = 0x5C;
+    addr_3.addr_type = 0;
+
+    addr_4.addr[0] = 0x12;
+    addr_4.addr[1] = 0x1F;
+    addr_4.addr[2] = 0xDA;
+    addr_4.addr[3] = 0x9F;
+    addr_4.addr[4] = 0x10;
+    addr_4.addr[5] = 0x14;
+    addr_4.addr_type = 0;
+
+    whitelist_addrs[0] = &addr_1;
+    whitelist_addrs[1] = &addr_2;
+    whitelist_addrs[2] = &addr_3;
+    whitelist_addrs[3] = &addr_4;
+
+    whitelist.pp_addrs = whitelist_addrs;
+    whitelist.addr_count = 4;
+    whitelist.pp_irks = whitelist_irks;
+    whitelist.irk_count = 0;
+
     // Initialize advertising parameters (used when starting advertising).
     memset(&m_adv_params, 0, sizeof(m_adv_params));
 
     m_adv_params.type        = BLE_GAP_ADV_TYPE_ADV_IND;
     m_adv_params.p_peer_addr = NULL;                           // Undirected advertisement.
-    m_adv_params.fp          = BLE_GAP_ADV_FP_ANY;
+    m_adv_params.fp          = BLE_GAP_ADV_FP_FILTER_BOTH;
     m_adv_params.interval    = APP_ADV_INTERVAL;
     m_adv_params.timeout     = APP_ADV_TIMEOUT_IN_SECONDS;
+    m_adv_params.p_whitelist = &whitelist;
 }
 
 
@@ -462,7 +523,7 @@ static void services_init(void)
 
 
 /**@brief Function for starting application timers.
- */
+*/
 static void application_timers_start(void)
 {
     uint32_t err_code;
@@ -474,7 +535,7 @@ static void application_timers_start(void)
 
 
 /**@brief Function for starting advertising.
- */
+*/
 static void advertising_start(void)
 {
     uint32_t err_code;
@@ -531,7 +592,7 @@ static void conn_params_error_handler(uint32_t nrf_error)
 
 
 /**@brief Function for initializing the Connection Parameters module.
- */
+*/
 static void conn_params_init(void)
 {
     uint32_t               err_code;
@@ -562,28 +623,28 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 
     switch (p_ble_evt->header.evt_id)
     {
-    case BLE_GAP_EVT_CONNECTED:
-        nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
-        m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
-        break;
-
-    case BLE_GAP_EVT_DISCONNECTED:
-        advertising_start();
-        break;
-
-    case BLE_GAP_EVT_TIMEOUT:
-        if (p_ble_evt->evt.gap_evt.params.timeout.src == BLE_GAP_TIMEOUT_SRC_ADVERTISEMENT)
-        {
+        case BLE_GAP_EVT_CONNECTED:
             nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
-            // Go to system-off mode (this function will not return; wakeup will cause a reset).
-            err_code = sd_power_system_off();
-            APP_ERROR_CHECK(err_code);
-        }
-        break;
+            m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+            break;
 
-    default:
-        // No implementation needed.
-        break;
+        case BLE_GAP_EVT_DISCONNECTED:
+            advertising_start();
+            break;
+
+        case BLE_GAP_EVT_TIMEOUT:
+            if (p_ble_evt->evt.gap_evt.params.timeout.src == BLE_GAP_TIMEOUT_SRC_ADVERTISEMENT)
+            {
+                nrf_gpio_pin_clear(ADVERTISING_LED_PIN_NO);
+                // Go to system-off mode (this function will not return; wakeup will cause a reset).
+                err_code = sd_power_system_off();
+                APP_ERROR_CHECK(err_code);
+            }
+            break;
+
+        default:
+            // No implementation needed.
+            break;
     }
 }
 
@@ -595,17 +656,17 @@ static void on_sys_evt(uint32_t sys_evt)
 {
     switch(sys_evt)
     {
-    case NRF_EVT_FLASH_OPERATION_SUCCESS:
-    case NRF_EVT_FLASH_OPERATION_ERROR:
-        if (m_memory_access_in_progress)
-        {
-            m_memory_access_in_progress = false;
-            advertising_start();
-        }
-        break;
-    default:
-        // No implementation needed.
-        break;
+        case NRF_EVT_FLASH_OPERATION_SUCCESS:
+        case NRF_EVT_FLASH_OPERATION_ERROR:
+            if (m_memory_access_in_progress)
+            {
+                m_memory_access_in_progress = false;
+                advertising_start();
+            }
+            break;
+        default:
+            // No implementation needed.
+            break;
     }
 }
 
@@ -660,7 +721,7 @@ static void ble_stack_init(void)
 
     // Initialize the SoftDevice handler module (external XTAL)
     SOFTDEVICE_HANDLER_INIT(NRF_CLOCK_LFCLKSRC_XTAL_250_PPM,
-                            false);
+            false);
 
 #ifdef S110
     // Enable BLE stack
@@ -685,8 +746,8 @@ static void ble_stack_init(void)
  * @param[in]   p_evt   Data associated to the device manager event.
  */
 static uint32_t device_manager_evt_handler(dm_handle_t const    * p_handle,
-                                           dm_event_t const     * p_event,
-                                           api_result_t           event_result)
+        dm_event_t const     * p_event,
+        api_result_t           event_result)
 {
     APP_ERROR_CHECK(event_result);
     return NRF_SUCCESS;
@@ -694,7 +755,7 @@ static uint32_t device_manager_evt_handler(dm_handle_t const    * p_handle,
 
 
 /**@brief Function for the Device Manager initialization.
- */
+*/
 static void device_manager_init(void)
 {
     uint32_t                err_code;
@@ -708,11 +769,6 @@ static void device_manager_init(void)
     err_code = dm_init(&init_data);
     APP_ERROR_CHECK(err_code);
 
-	//passkey setup
-	ble_opt_t ble_opt;
-	ble_opt.gap.passkey.p_passkey = &passkey[0];
-	err_code =  sd_ble_opt_set(BLE_GAP_OPT_PASSKEY, &ble_opt);
-	APP_ERROR_CHECK(err_code);
 
     memset(&register_param.sec_param, 0, sizeof(ble_gap_sec_params_t));
 
@@ -732,7 +788,7 @@ static void device_manager_init(void)
 
 
 /**@brief Function for the Power manager.
- */
+*/
 static void power_manage(void)
 {
     uint32_t err_code = sd_app_evt_wait();
@@ -741,18 +797,17 @@ static void power_manage(void)
 
 
 /**@brief Function for application main entry.
- */
+*/
+Wiegand_ctx wiegand_ctx;
 int main(void)
 {
     // initialze wiegand context data struct
-    Wiegand_ctx *wiegand_ctx = malloc(sizeof(Wiegand_ctx));
-	memset(wiegand_ctx, 0, sizeof(Wiegand_ctx));
 
     // Initialize.
     leds_init();
     timers_init();
     ble_stack_init();
-    wiegand_init(wiegand_ctx);
+    wiegand_init(&wiegand_ctx);
     device_manager_init();
     gap_params_init();
     advertising_init();
@@ -762,25 +817,29 @@ int main(void)
     // Start execution.
     application_timers_start();
     advertising_start();
-	adc_init();
+    adc_init();
+
+    printf("init done!\n");
 
     // Enter main loop.
     for (;;)
     {
         wiegand_task();
-		// number of cards over the maximum that we can transmit
-		uint16_t num_skip = 0;
-		if (wiegand_ctx->card_count > BLE_MAX_CARDS) {
-			num_skip = wiegand_ctx->card_count - BLE_MAX_CARDS;
-		}
-		// number of bytes to transmit over BLE
-		uint16_t tx_len = wiegand_ctx->card_count * sizeof(Card);
-		if (tx_len > BLE_MAX_TX_LEN) {
-			tx_len = BLE_MAX_TX_LEN;
-		}
+        // number of cards over the maximum that we can transmit
+        uint16_t num_skip = 0;
+        if (wiegand_ctx.card_count > BLE_MAX_CARDS) {
+            num_skip = wiegand_ctx.card_count - BLE_MAX_CARDS;
+        }
+        // number of bytes to transmit over BLE
+        uint16_t tx_len = wiegand_ctx.card_count * sizeof(Card);
+        if (tx_len > BLE_MAX_TX_LEN) {
+            tx_len = BLE_MAX_TX_LEN;
+        }
 
-		// load cards for transmission
-        ble_wiegand_last_cards_set(&m_wiegand, (uint8_t *)&(wiegand_ctx->card_store[num_skip]), tx_len);
+        // load cards for transmission
+        ble_wiegand_last_cards_set(&m_wiegand,
+                                   (uint8_t *)&(wiegand_ctx.card_store[num_skip]),
+                                   tx_len);
         power_manage();
     }
 }

