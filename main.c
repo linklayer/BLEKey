@@ -106,9 +106,6 @@ static ble_gap_whitelist_t  whitelist;
 static ble_gap_addr_t* whitelist_addrs[BLE_GAP_WHITELIST_ADDR_MAX_COUNT];
 static ble_gap_irk_t* whitelist_irks[BLE_GAP_WHITELIST_IRK_MAX_COUNT];
 static ble_gap_addr_t addr_1;
-static ble_gap_addr_t addr_2;
-static ble_gap_addr_t addr_3;
-static ble_gap_addr_t addr_4;
 
 #if 1
 /**@brief Function for error handling, which is called when an error has occurred.
@@ -333,57 +330,23 @@ static void advertising_init(void)
     err_code = ble_advdata_set(&advdata, NULL);
     APP_ERROR_CHECK(err_code);
 
-    memset(&whitelist, 0, sizeof(whitelist));
+    memset(&whitelist, 0, sizeof(ble_gap_whitelist_t));
 
-    addr_1.addr[0] = 0x89;
-    addr_1.addr[1] = 0xEC;
-    addr_1.addr[2] = 0xCE;
-    addr_1.addr[3] = 0xC2;
-    addr_1.addr[4] = 0x15;
-    addr_1.addr[5] = 0x3C;
-    addr_1.addr_type = 0;
+    /* example of adding a whitelist */
     /*
-
-       addr_1.addr[0] = 0xE4;
-       addr_1.addr[1] = 0x0C;
-       addr_1.addr[1] = 0x69;
-       addr_1.addr[1] = 0x70;
-       addr_1.addr[4] = 0xF1;
-       addr_1.addr[5] = 0x5C;
-       addr_1.addr_type = 0;
-       */
-
-    addr_2.addr[0] = 0x9A;
-    addr_2.addr[1] = 0x0F;
-    addr_2.addr[2] = 0xBD;
-    addr_2.addr[3] = 0xC6;
-    addr_2.addr[4] = 0x86;
-    addr_2.addr[5] = 0xA0;
-    addr_2.addr_type = 0;
-
-    addr_3.addr[0] = 0xE4;
-    addr_3.addr[1] = 0x0B;
-    addr_3.addr[2] = 0x69;
-    addr_3.addr[3] = 0x70;
-    addr_3.addr[4] = 0xF3;
-    addr_3.addr[5] = 0x5C;
-    addr_3.addr_type = 0;
-
-    addr_4.addr[0] = 0x12;
-    addr_4.addr[1] = 0x1F;
-    addr_4.addr[2] = 0xDA;
-    addr_4.addr[3] = 0x9F;
-    addr_4.addr[4] = 0x10;
-    addr_4.addr[5] = 0x14;
-    addr_4.addr_type = 0;
+    addr_1.addr[0] = 0xAA;
+    addr_1.addr[1] = 0xBB;
+    addr_1.addr[1] = 0xCC;
+    addr_1.addr[1] = 0xDD;
+    addr_1.addr[4] = 0xEE;
+    addr_1.addr[5] = 0xFF;
+    addr_1.addr_type = 0;
+    */
 
     whitelist_addrs[0] = &addr_1;
-    whitelist_addrs[1] = &addr_2;
-    whitelist_addrs[2] = &addr_3;
-    whitelist_addrs[3] = &addr_4;
 
     whitelist.pp_addrs = whitelist_addrs;
-    whitelist.addr_count = 4;
+    whitelist.addr_count = 1;
     whitelist.pp_irks = whitelist_irks;
     whitelist.irk_count = 0;
 
@@ -392,7 +355,8 @@ static void advertising_init(void)
 
     m_adv_params.type        = BLE_GAP_ADV_TYPE_ADV_IND;
     m_adv_params.p_peer_addr = NULL;                           // Undirected advertisement.
-    m_adv_params.fp          = BLE_GAP_ADV_FP_FILTER_BOTH;
+    /* change to BLE BLE_GAP_ADV_FP_FILTER_BOTH to enable whitelist */
+    m_adv_params.fp          = BLE_GAP_ADV_FP_ANY;
     m_adv_params.interval    = APP_ADV_INTERVAL;
     m_adv_params.timeout     = APP_ADV_TIMEOUT_IN_SECONDS;
     m_adv_params.p_whitelist = &whitelist;
@@ -838,8 +802,8 @@ int main(void)
 
         // load cards for transmission
         ble_wiegand_last_cards_set(&m_wiegand,
-                                   (uint8_t *)&(wiegand_ctx.card_store[num_skip]),
-                                   tx_len);
+                (uint8_t *)&(wiegand_ctx.card_store[num_skip]),
+                tx_len);
         power_manage();
     }
 }

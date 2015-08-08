@@ -41,6 +41,7 @@ static volatile bool data_ready = false;       // set when timer interrupt fires
 static volatile bool timer_started = false;    // if recv wiegand
 static volatile bool card_fubar = false;       // set if BLE screws up an incoming card
 static volatile bool start_tx = false;         // triggers sending of wiegand data
+static volatile bool ignore_reads = false;     // flag to ignore read cards
 
 static Wiegand_ctx *p_ctx;              // Struct to store card data
 
@@ -142,9 +143,7 @@ void add_card(uint64_t *data, uint8_t len)
 
 void tx_wiegand(uint64_t data, uint8_t size)
 {
-    uint8_t foo;
     // this turns off application interrupts (not softdevice)
-    sd_nvic_critical_region_enter(&foo);
     for (uint8_t i = size; i-- > 0;)
     {
         // wiegand pulses should be ~40us, there should be ~2.025ms
@@ -155,7 +154,6 @@ void tx_wiegand(uint64_t data, uint8_t size)
         bit ? nrf_gpio_pin_clear(DATA1_CTL) : nrf_gpio_pin_clear(DATA0_CTL);
         nrf_delay_us(1380);
     }
-    sd_nvic_critical_region_exit(foo);
 }
 
 /*
@@ -166,6 +164,7 @@ void send_wiegand(uint8_t card_idx)
 {
     uint64_t data;
     uint8_t bit_len;
+    ignore_reads = true;
     printf("got card %d from BLE\r\n", card_idx);
     switch(card_idx){
         case 255:
@@ -186,6 +185,7 @@ void send_wiegand(uint8_t card_idx)
     printf("data %llx and len is %d\r\n", data, bit_len);
     tx_wiegand(data, bit_len);
     printf("data sent\r\n");
+    ignore_reads = false;
 }
 
 /*
@@ -225,6 +225,7 @@ void wiegand_task(void)
                 case CTL_CARD_1:
                     printf("Control card: deadbeef\r\n");
                     printf("Replay last card %llx\r\n", last_card);
+                    nrf_delay_us(50000);
                     send_wiegand(255);
                     nrf_delay_us(50000);
                     printf("DoS Wiegand for 20 seconds...\r\n");
@@ -282,6 +283,11 @@ void GPIOTE_IRQHandler(void)
     // This handler will be run after wakeup from system ON (GPIO wakeup)
     uint32_t port_status = NRF_GPIO->IN;
     NRF_GPIOTE->EVENTS_PORT = 0;    // Clear event
+
+    if (ignore_reads) {
+        return;
+    }
+
     card_data <<= 1;
     if (!(port_status >> DATA1_IN & 1UL)) {
         card_data |= 1;
