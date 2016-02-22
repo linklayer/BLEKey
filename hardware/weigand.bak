@@ -242,9 +242,9 @@ F 3 "" H 9850 4250 60  0000 C CNN
 	1    9850 4250
 	1    0    0    -1  
 $EndComp
-Text Label 9150 4150 0    60   ~ 0
+Text Label 8000 4150 0    60   ~ 0
 DATA_0
-Text Label 9150 4250 0    60   ~ 0
+Text Label 8000 4250 0    60   ~ 0
 DATA_1
 $Comp
 L GND #PWR06
@@ -373,8 +373,6 @@ F 3 "" H 1050 2450 60  0000 C CNN
 $EndComp
 Text Label 3450 3550 0    60   ~ 0
 TX_TTL
-Text Label 3450 3750 0    60   ~ 0
-RX_TTL
 Wire Wire Line
 	7550 1650 8800 1650
 Wire Wire Line
@@ -436,10 +434,6 @@ Wire Wire Line
 Wire Wire Line
 	10300 4150 10700 4150
 Wire Wire Line
-	9150 4150 9500 4150
-Wire Wire Line
-	9500 4250 9150 4250
-Wire Wire Line
 	7550 2000 8050 2000
 Wire Wire Line
 	2200 1000 2200 1200
@@ -466,13 +460,7 @@ Wire Wire Line
 Wire Wire Line
 	3400 3550 3850 3550
 Wire Wire Line
-	3400 3750 3850 3750
-Wire Wire Line
 	3400 4650 3850 4650
-Wire Wire Line
-	3400 3450 3850 3450
-Text Label 3450 3450 0    60   ~ 0
-GPIO_1
 Wire Wire Line
 	1900 2750 1700 2750
 Wire Wire Line
@@ -553,20 +541,24 @@ Wire Wire Line
 	8400 4450 8400 4350
 Wire Wire Line
 	8400 4350 8450 4350
+Text Label 8000 4050 0    60   ~ 0
+TX_TTL
 Wire Wire Line
 	8000 4050 8450 4050
-Text Label 8000 4050 0    60   ~ 0
-GPIO_1
-Text Label 8000 4150 0    60   ~ 0
-TX_TTL
-Text Label 8000 4250 0    60   ~ 0
-RX_TTL
-Wire Wire Line
-	8000 4150 8450 4150
-Wire Wire Line
-	8000 4250 8450 4250
 Wire Wire Line
 	9400 4450 9400 4350
 Wire Wire Line
 	9400 4350 9500 4350
+Text Label 9100 4150 0    60   ~ 0
+DATA_0
+Text Label 9100 4250 0    60   ~ 0
+DATA_1
+Wire Wire Line
+	8000 4150 8450 4150
+Wire Wire Line
+	8450 4250 8000 4250
+Wire Wire Line
+	9100 4150 9500 4150
+Wire Wire Line
+	9500 4250 9100 4250
 $EndSCHEMATC
