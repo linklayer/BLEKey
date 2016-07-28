@@ -7,6 +7,20 @@ BLEKey is a tool designed to demonstrate the risks of using the Wiegand protocol
 
 [Here's a video](https://www.youtube.com/watch?v=seKas8KFcSI) of us talking about the BLEKey at Blackhat USA 2015.
 
+Building
+--------
+
+1. Download the GNU ARM Embedded Toolchain for your OS (gcc-arm-none-eabi-4_9-2015q1 was used to build this version): https://launchpad.net/gcc-arm-embedded/+download
+2. Clone the repo: `git clone https://github.com/linklayer/BLEKey.git`
+3. Edit the `Makefile.posix` file in the `BLEKey/gcc/` directory and make sure the path to the downloaded ARM toolchain is correct.
+4. Change to the `BLEKey/gcc` directory and run `make`
+
+If you have a Segger hooked up to the board you can also run:
+
+* `make erase` to erase the nrf 
+* `make flash-sd` to flash the soft device
+* `make flash` to flash the compiled hex 
+
 Flashing
 --------
 
