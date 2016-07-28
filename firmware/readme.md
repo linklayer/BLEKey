@@ -24,3 +24,4 @@ Building a Superhex
 
 References:
 * https://devzone.nordicsemi.com/question/1462/nrf51822-how-to-merge-software-device-and-application-code-to-one-hex-file/
+* https://devzone.nordicsemi.com/question/22056/combining-sd-dfu-and-application-hex-and-programming/
