@@ -15,13 +15,20 @@ The superhex file includes the application, bootloader and the softdevice. To fl
 
 Building a Superhex
 -------------------
+** UNDER CONSTRUCTION - NOT TESTED YET **
  
- UNDER CONSTRUCTION
- 
-* J-Link Software
 * Softdevice (in the `/nordic` directory)
-* Bootloader hex (in the `/firmware` directory) 
+* bootloader.hex, app_valid_setting_apply.hex, and mergehex.exe (in the `/firmware` directory) 
+* Compiled firmware (buid it)
+* Alternative to mergehex.exe you can use the J-Link Software (SEGGER J-Flash) GUI to merge files. Read the first reference below to see how to do this. 
+
+Commands: 
+```
+mergehex --merge s110_nrf51822_7.1.0_softdevice.hex bootloader.hex --output SD_BL.hex
+mergehex --merge SD_BL.hex blekey_s110_xxaa.hex --output SD_BL_APP.hex
+mergehex --merge SD_BL_APP.hex app_valid_setting_apply.hex --output super.hex
+```
 
 References:
-* https://devzone.nordicsemi.com/question/1462/nrf51822-how-to-merge-software-device-and-application-code-to-one-hex-file/
 * https://devzone.nordicsemi.com/question/22056/combining-sd-dfu-and-application-hex-and-programming/
+* https://devzone.nordicsemi.com/question/1462/nrf51822-how-to-merge-software-device-and-application-code-to-one-hex-file/
