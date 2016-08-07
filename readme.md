@@ -7,6 +7,8 @@ BLEKey is a tool designed to demonstrate the risks of using the Wiegand protocol
 
 [Here's a video](https://www.youtube.com/watch?v=seKas8KFcSI) of us talking about the BLEKey at Blackhat USA 2015.
 
+You can get BLEKey here: http://store.cantact.io/products/blekey-1?variant=18261748871 **ANY OTHER STORE/SITE IS UNOFFICIAL** 
+
 Building
 --------
 
