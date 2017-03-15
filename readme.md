@@ -26,12 +26,12 @@ If you have a Segger hooked up to the board you can also run:
 Flashing
 --------
 
-###Firmware Over the Air (FOTA)
+### Firmware Over the Air (FOTA)
 We've included a file in the `/firmware` folder called `super.hex`. This firmware has a bootloader included that allows the BLEKey to be flashed from a cell phone by shorting the first and last pins of the P2 port, and inserting a battery. The firmware update has been tested on the Android platform using the Nordic Master Control Panel tool.
 
 [We've created a video to demonstrate the process.](/firmware/fw_update.mp4)
 
-###MacOS or Linux
+### MacOS or Linux
 
 To flash the softdevice and BLEKey firmware from the CLI you can use JLinkExe which is provided in the [Segger Software](https://www.segger.com/jlink-software.html)
 
@@ -56,14 +56,14 @@ If you prefer a GUI you can always use [rknrfgo](http://sourceforge.net/projects
 
 The cheatsheet above is [ripped from Nordic's blog](https://devzone.nordicsemi.com/blogs/22/getting-started-with-nrf51-development-on-mac-os-x/)
 
-###Windows
+### Windows
 
 Use tools from Nordic.
 
 Using BLEKey
 ------------
 
-### Ble Characteristics
+### BLE Characteristics
 | Service  | Characteristic | Function
 |----------|----------------|---------------
 | 0xABCD   | 0xAAAA	 	    | Read Last Cards
@@ -71,15 +71,15 @@ Using BLEKey
 | 0xABCD   | 0xCCCC			| Send Data (Data)
 | 0xABCD   | 0xDDDD			| Send Data (Length)
 
-###Client
+### Client
 
 There is a BLEKey client in the client/ directory of the git repo. See readme.md and requirements.txt for more information on its use.
 
-###Phones/Tablets
+### Phones/Tablets
 
 A client is planned. Until then download any BLE utility that can read/write BLE characteristics. See below for more information on specific characteristics.
 
-###CLI (Linux)
+### CLI (Linux)
 
 Find your Bluetooth device with `hcitool dev` scan for BLEKey with `hcitool -i <dev> lescan`
 
@@ -114,14 +114,14 @@ You can also just use gatttool from the command line to yell BLEKey to send Wieg
 sudo gatttool -t random -b D4:34:E8:CA:6F:6A --char-write-req -a 0x000d -n 01
 ```
 
-###Notes:
+### Notes:
 
 * Bluetooth Explorer is in the [Hardware IO Tools from Apple](http://adcdownload.apple.com/Developer_Tools/Hardware_IO_Tools_for_Xcode_6.3/HardwareIOTools_Xcode_6.3.dmg) it's probably the best BLE utility for Mac.
 
 Pinouts
 -------
 
-###Harware rev. 0 code name Acamas
+### Harware rev. 0 code name Acamas
 
 | Pin	| Function 		|
 | ------|---------------|
@@ -138,7 +138,7 @@ Pinouts
 | 35	| DIO			|
 | 36	| CLK			|
 
-###Hardware rev. 1 Agapenor
+### Hardware rev. 1 Agapenor
 
 Pinouts are identical to Acamas unless otherwise noted.
 
@@ -149,7 +149,7 @@ Pinouts are identical to Acamas unless otherwise noted.
 | 8		| GPIO			|
 | 20	| LED0			|
 
-####P1 - Programming port (square solder mask pin 0)
+#### P1 - Programming port (square solder mask pin 0)
 
 | Pin	| Function 		|
 | ------|---------------|
@@ -158,7 +158,7 @@ Pinouts are identical to Acamas unless otherwise noted.
 | 2		| CLK			|
 | 3     | Gnd			|
 
-####P2 - Serial/GPIO port (square solder mask pin 0)
+#### P2 - Serial/GPIO port (square solder mask pin 0)
 
 | Pin	| Function 		|
 | ------|---------------|
