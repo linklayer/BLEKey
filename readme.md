@@ -63,7 +63,13 @@ Use tools from Nordic.
 Using BLEKey
 ------------
 
-###TODO ADD CHARACTERISTIC INFO HERE.
+### Ble Characteristics
+| Service  | Characteristic | Function
+|----------|----------------|---------------
+| 0xABCD   | 0xAAAA	 	    | Read Last Cards
+| 0xABCD   | 0xBBBB			| Replay Card
+| 0xABCD   | 0xCCCC			| Send Data (Data)
+| 0xABCD   | 0xDDDD			| Send Data (Length)
 
 ###Client
 
